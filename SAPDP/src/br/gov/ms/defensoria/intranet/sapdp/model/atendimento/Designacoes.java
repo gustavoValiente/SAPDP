@@ -17,6 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.gov.ms.defensoria.intranet.sapdp.generics.IGenericEntity;
 import br.gov.ms.defensoria.intranet.sapdp.model.Nucleo;
 import br.gov.ms.defensoria.intranet.sapdp.model.assistido.Assistido;
@@ -41,6 +44,7 @@ public class Designacoes implements IGenericEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@ManyToOne(fetch = FetchType.EAGER)	
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "id_assistido")
 	private Assistido assistido;
 	@OneToOne
