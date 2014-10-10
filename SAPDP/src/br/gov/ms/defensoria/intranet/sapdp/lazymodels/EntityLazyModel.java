@@ -1,9 +1,9 @@
 package br.gov.ms.defensoria.intranet.sapdp.lazymodels;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +28,16 @@ public class EntityLazyModel extends LazyDataModel<IGenericEntity>
 
 	private IGenericEntity entityClass;
 
-	private Map<String, String> parametros;
+	private Map<String, Object> parametros;
 
 	private List<IGenericEntity> listEntity;
 
-	public EntityLazyModel(IGenericEntity entityClass) {
+	private Object[] argumentos;
+
+	public EntityLazyModel(IGenericEntity entityClass, Object... argumentos) {
 		this.entityClass = entityClass;
+		this.argumentos = argumentos;
+
 	}
 
 	private SegurancaService getService() {
@@ -50,17 +54,19 @@ public class EntityLazyModel extends LazyDataModel<IGenericEntity>
 			String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
 		String orderField = "", order = "";
-		parametros = new HashMap<String, String>();
+		parametros = new HashMap<String, Object>();
 		listEntity = new ArrayList<IGenericEntity>();
 
-		Field[] fields = entityClass.getClass().getDeclaredFields();
-		for (Field field : fields) {
-			if (!filters.isEmpty()) {
-				if (filters.get(field.getName()) != null) {
-					parametros.put(field.getName(), filters
-							.get(field.getName()).toString());
-				}
-			}
+		for (Iterator<String> parametro = filters.keySet().iterator(); parametro
+				.hasNext();) {
+			String campo = parametro.next();
+			parametros.put(campo, filters.get(campo).toString());
+		}
+
+		for (int i = 0; i < argumentos.length; i++) {
+			String campo = (String) argumentos[0];
+			Object valorArgumento = argumentos[1];
+			parametros.put(campo, valorArgumento);
 		}
 
 		if (sortField != null)

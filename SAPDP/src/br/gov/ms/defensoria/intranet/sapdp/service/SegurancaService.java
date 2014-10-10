@@ -92,14 +92,14 @@ public class SegurancaService {
 	
 	public List<IGenericEntity> carregarPesquisaLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros, IGenericEntity entity) {
+			Map<String, Object> parametros, IGenericEntity entity) {
 		return searchBO.carregarPesquisaLazy(startingAt, maxPerPage,
 				fieldOrder, order, parametros, entity);
 	}
 
 	public List<IGenericEntity> carregarPesquisaUsuarioLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros) {
+			Map<String, Object> parametros) {
 		return searchBO.carregarPesquisaUsuarioLazy(startingAt, maxPerPage,
 				fieldOrder, order, parametros);
 	}

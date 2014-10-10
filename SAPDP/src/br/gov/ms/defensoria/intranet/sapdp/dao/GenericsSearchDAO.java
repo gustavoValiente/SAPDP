@@ -25,17 +25,27 @@ public class GenericsSearchDAO {
 	@SuppressWarnings("unchecked")
 	public List<IGenericEntity> carregarPesquisaLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros, IGenericEntity entity) {
+			Map<String, Object> parametros, IGenericEntity entity) {
 
 		String jpql = "SELECT entity FROM " + entity.getClass().getName()
 				+ " entity where entity.id > 0";
 
 		// Filtros
 		Set<String> listParametros = parametros.keySet();
+
+		int indice = 0;
 		for (Iterator<String> parametro = listParametros.iterator(); parametro
 				.hasNext();) {
 			String campo = parametro.next();
-			jpql += " AND entity." + campo + " LIKE :" + campo;
+			String args = "args_" + indice;
+			Object valueArgs = parametros.get(campo);
+			if(valueArgs.getClass().equals(String.class)){
+				jpql += " AND entity." + campo + " LIKE :" + args;
+			} else {
+				jpql += " AND entity." + campo + " = :" + args;
+			}
+			
+			indice++;
 		}
 
 		// Ordenacao
@@ -47,10 +57,18 @@ public class GenericsSearchDAO {
 		q.setFirstResult(startingAt);
 		q.setMaxResults(maxPerPage);
 
+		indice = 0;
 		for (Iterator<String> parametro = listParametros.iterator(); parametro
 				.hasNext();) {
 			String campo = parametro.next();
-			q.setParameter(campo, "%" + parametros.get(campo) + "%");
+			String args = "args_" + indice;
+			Object valueArgs = parametros.get(campo);
+			if(valueArgs.getClass().equals(String.class)){
+				q.setParameter(args, "%" + valueArgs.toString() + "%");
+			} else{
+				q.setParameter(args, valueArgs);
+			}
+			
 		}
 
 		List<IGenericEntity> entities = q.getResultList();
@@ -64,7 +82,7 @@ public class GenericsSearchDAO {
 	@SuppressWarnings("unchecked")
 	public List<IGenericEntity> carregarPesquisaUsuarioLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros) {
+			Map<String, Object> parametros) {
 
 		String jpql = "SELECT entity FROM Usuario entity where entity.login <> 'master' ";
 
