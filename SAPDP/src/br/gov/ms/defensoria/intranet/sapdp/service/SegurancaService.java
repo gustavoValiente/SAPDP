@@ -196,6 +196,11 @@ public class SegurancaService {
 	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(String defensor, String tipoDesignacao) throws ParseException{
 		return designacaoBO.filtrarDesignacoesPorDefensorData(defensor, tipoDesignacao);
 	}
+	
+	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorDataPenal(String defensor, String tipoDesignacao) throws ParseException {
+
+		return designacaoBO.filtrarDesignacoesPorDefensorDataPenal(defensor, tipoDesignacao);
+	}
 
 	public Designacoes designarAssistidoSigo(Assistido assistido, Usuario usuario){
 		return designacaoBO.designarAssistidoSigo(assistido, usuario);
