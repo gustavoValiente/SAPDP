@@ -71,7 +71,8 @@ public class Designacoes implements IGenericEntity {
 	private String loginSubstituicao;
 	@Column(length = 30)
 	private String sala;
-
+	private String tipoDesignacao;
+	
 	public Designacoes() {
 
 	}
@@ -179,6 +180,14 @@ public class Designacoes implements IGenericEntity {
 	public void setSala(String sala) {
 		this.sala = sala;
 	}
+	
+	public String getTipoDesignacao() {
+		return tipoDesignacao;
+	}
+
+	public void setTipoDesignacao(String tipoDesignacao) {
+		this.tipoDesignacao = tipoDesignacao;
+	}
 
 	@Override
 	public int hashCode() {
@@ -278,5 +287,5 @@ public class Designacoes implements IGenericEntity {
 			return false;
 		return true;
 	}
-
+	
 }
