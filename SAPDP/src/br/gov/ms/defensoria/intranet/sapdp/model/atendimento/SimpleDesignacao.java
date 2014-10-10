@@ -28,7 +28,7 @@ public class SimpleDesignacao {
 	public SimpleDesignacao(Long idDesignacao, String nomeAssistido, String loginDefensor, String preferencial, 
 			Date dataDesignacao, String nucleo, StatusDesignacao statusDesignacao, Long idAtendimentoPai, 
 			String loginSubstituicao, String tipoDesignacao) {
-		super();
+		
 		this.idDesignacao = idDesignacao;
 		this.nomeAssistido = nomeAssistido;
 		this.loginDefensor = loginDefensor;
@@ -41,10 +41,9 @@ public class SimpleDesignacao {
 		this.tipoDesignacao = tipoDesignacao;
 	}
 	
-	public SimpleDesignacao(Long idDesignacao, String nomeAssistido, String loginDefensor, String preferencial, 
-			Date dataDesignacao, StatusDesignacao statusDesignacao, Long idAtendimentoPai, 
-			String loginSubstituicao, String tipoDesignacao) {
-		super();
+	public SimpleDesignacao(Long idDesignacao, String nomeAssistido, String loginDefensor,  
+			Date dataDesignacao, StatusDesignacao statusDesignacao, String loginSubstituicao, String tipoDesignacao) {
+		
 		this.idDesignacao = idDesignacao;
 		this.nomeAssistido = nomeAssistido;
 		this.loginDefensor = loginDefensor;		

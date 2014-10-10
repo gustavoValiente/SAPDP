@@ -88,7 +88,7 @@ public class DesignacaoBO {
 
 		normalizaDatasAtuais();
 		
-		return dao.filtrarDesignacoesPorDefensorData(defensor,  c1.getTime(), c2.getTime(), tipoDesignacao);		
+		return dao.filtrarDesignacoesPorDefensorDataPenal(defensor,  c1.getTime(), c2.getTime(), tipoDesignacao);		
 		
 	}
 	

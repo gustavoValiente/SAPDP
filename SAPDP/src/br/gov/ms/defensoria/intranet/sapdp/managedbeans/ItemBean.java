@@ -11,10 +11,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.LazyDataModel;
 
 import br.gov.ms.defensoria.intranet.sapdp.lazymodels.EntityLazyModel;
-import br.gov.ms.defensoria.intranet.sapdp.lazymodels.ItemLazyModel;
 import br.gov.ms.defensoria.intranet.sapdp.model.Nucleo;
 import br.gov.ms.defensoria.intranet.sapdp.model.atendimento.ItemAtendimento;
 import br.gov.ms.defensoria.intranet.sapdp.sessionbeans.ItemRepositorio;

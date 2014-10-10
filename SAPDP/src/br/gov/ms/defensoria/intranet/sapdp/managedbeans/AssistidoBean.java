@@ -266,7 +266,7 @@ public class AssistidoBean {
 	}
 
 	/* *****************************  ASSISTIDO Já EXISTE NA BASE DA DPGE ************************************** */
-	public void selecionaAssistidoFromDialog() {
+	public int selecionaAssistidoFromDialog() {
 		
 		//System.out.println("SELECIONADO ASSISTIDO"+this.assistidoPresoBean.getSelecionadoPreso().getId()+
 		//		" ---- "+this.assistidoPresoBean.getSelecionadoPreso().getNome());
@@ -301,9 +301,9 @@ public class AssistidoBean {
 				
 		carregarDadosRemicao(this.dadosPreso.getAssistido().getId());
     	
-		designarAssistidoSigo(this.dadosPreso.getAssistido());
-		
-    	RequestContext.getCurrentInstance().execute("PF('selectAssistidoPreso').hide()");   
+    	RequestContext.getCurrentInstance().execute("PF('selectAssistidoPreso').hide()");
+    	
+    	return designarAssistidoSigo(this.dadosPreso.getAssistido());
     }
 	
 	public void carregarDadosRemicao(Long idPreso){
@@ -367,9 +367,8 @@ public class AssistidoBean {
 	
 	/* *********************************************************************************************************** */
 
-	public CondutaCarceraria obterCondutaCarceraria() {
-
-		/*switch (this.selecionaAssistidoSigo.getCondutaCarceraria()) {
+	public CondutaCarceraria obterCondutaCarceraria() {		
+		switch (this.selecionaAssistidoSigo.getCondutaCarceraria()) {
 
 			case "BOM" :
 				return CondutaCarceraria.BOM;
@@ -377,11 +376,10 @@ public class AssistidoBean {
 				return CondutaCarceraria.RUIM;
 			default :
 				return null;
-		}*/
-		return null;
+		}
 	}
 	
-	public void cadastraAssistidoSigoNaBase(){
+	public int cadastraAssistidoSigoNaBase(){
 		try {
 			AssistidoPreso aPreso = new AssistidoPreso();
 			Assistido a = new Assistido();
@@ -417,26 +415,30 @@ public class AssistidoBean {
 			fc.addMessage(null, new FacesMessage(
 					"Assistido cadastrado com sucesso!"));
 			
-			designarAssistidoSigo(a);
+			return designarAssistidoSigo(a);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void designarAssistidoSigo(Assistido assistido) {
+	public int designarAssistidoSigo(Assistido assistido) {
 		Designacoes designacao = new Designacoes();
 		designacao = this.service.designarAssistidoSigo(assistido, this.usuarioServiceBean.obterUsuarioDaSessao());
 		if(designacao == null){
 			FacesContext fc = FacesContext.getCurrentInstance();        	
 			fc.addMessage(null, new FacesMessage(
 					"Designação não realizada!"));
+			return 0;
 		}else{
 			FacesContext fc = FacesContext.getCurrentInstance();        	
 			fc.addMessage(null, new FacesMessage(
 					"Designação realizada com sucesso!"));
+			return 1;
 		}
 	}
 	
