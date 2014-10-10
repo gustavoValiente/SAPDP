@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Estabelecimento Penal</h3>
+		<h:form id="form">
+
+			<p:growl id="msg" />
+
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Estabelecimento Penal"
+				id="pnEstPenal">
+				<p:panelGrid columns="2">
+					<h:outputLabel value="Nome:" />
+					<p:inputText value="#{estabelecimentoPenalBean.entity.nome}"
+						required="true" requiredMessage="Informe o nome" size="50" />
+
+					<h:panelGroup>
+						<p:commandButton
+							value="#{estabelecimentoPenalBean.entity.id == null ? 'Salvar' : 'Alterar'}"
+							action="#{estabelecimentoPenalBean.salvar()}"
+							process="pnEstPenal" update=":form"
+							style="width:100px" />
+						<p:commandButton value="Criar Nova"
+							action="#{estabelecimentoPenalBean.adicionarNovo()}"
+							process="@this" update="pnEstPenal,:form:msg"
+							style="width:100px" />
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaEstabelecimentoPenal" value="#{estabelecimentoPenalBean.listEstabelecimentoPenal}" var="entity" emptyMessage="Nenhum registro encontrado." paginator="true">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{entity.id}"/>
+				</p:column>
+				<p:column sortBy="#{entity.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{entity.nome}"/>
+				</p:column>
+				
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form:pnEstPenal" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{estabelecimentoPenalBean.entity}" value="#{entity}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{estabelecimentoPenalBean.remover}" process="@this" update="listaEstabelecimentoPenal" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{estabelecimentoPenalBean.entity}" value="#{entity}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
