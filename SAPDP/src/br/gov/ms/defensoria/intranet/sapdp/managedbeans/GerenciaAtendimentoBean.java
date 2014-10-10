@@ -53,6 +53,7 @@ public class GerenciaAtendimentoBean {
 	private SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");	
 
 	private String dataAtualizacaoPainel;
+	private String dataAtualizacaoPainelPenal;
 	
 	private LazyDataModel<SimpleAtendimento> simpleAtendimentosLazy = null;
 	
@@ -82,9 +83,16 @@ public class GerenciaAtendimentoBean {
 	}
 	
 	public void atualizarPainelAssistidosEmEspera() {
-		this.designacaoBean.buscaDesignacoesPorDefensorData();
+		this.designacaoBean.buscaDesignacoesPorDefensorData("PADRAO");
 		
 		this.dataAtualizacaoPainel = fmt.format(new Date());
+	}
+	
+	
+	public void atualizarPainelAssistidosEmEsperaPenal() {
+		this.designacaoBean.buscaDesignacoesPorDefensorData("PENAL");
+		
+		this.dataAtualizacaoPainelPenal = fmt.format(new Date());
 	}
 	
 	/**
@@ -290,6 +298,21 @@ public class GerenciaAtendimentoBean {
 		
 	}
 	
+	public void selecionaAssistidoFromDialog(){
+		//se realizou designação então carrega designações
+		this.assistidoBean.selecionaAssistidoFromDialog();
+		//if(this.assistidoBean.selecionaAssistidoFromDialog() == 1){
+		//	this.designacaoBean.buscaDesignacoesPorDefensorData("PENAL");
+		//}
+	}
+	
+	public void cadastraAssistidoSigoNaBase(){
+		this.assistidoBean.cadastraAssistidoSigoNaBase();
+		//if (this.assistidoBean.cadastraAssistidoSigoNaBase() == 1) {
+		//	this.designacaoBean.buscaDesignacoesPorDefensorData("PENAL");
+		//}
+	}
+	
 	
 	
 	public AssistidoBean getAssistidoBean() {
@@ -371,6 +394,16 @@ public class GerenciaAtendimentoBean {
 	public void setSimpleAtendimentosLazy(
 			LazyDataModel<SimpleAtendimento> simpleAtendimentosLazy) {
 		this.simpleAtendimentosLazy = simpleAtendimentosLazy;
+	}
+
+
+	public String getDataAtualizacaoPainelPenal() {
+		return dataAtualizacaoPainelPenal;
+	}
+
+
+	public void setDataAtualizacaoPainelPenal(String dataAtualizacaoPainelPenal) {
+		this.dataAtualizacaoPainelPenal = dataAtualizacaoPainelPenal;
 	}
 
 	
