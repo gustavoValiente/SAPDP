@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Municípios</h3>
+		<h:form id="form_municipioD">
+		
+			<p:growl id="msg"/>
+		
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Municípios" id="painelMunicipioD">
+			
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{municipioDistritoBean.municipioD.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:outputLabel value="Estado:"/>
+					<p:selectOneMenu value="#{municipioDistritoBean.municipioD.estado}" converter="estadoConverter">
+						<f:selectItems value="#{estadoBean.selecionarTudo}" var="e" itemValue="#{e}" itemLabel="#{e.nome}" />								
+					</p:selectOneMenu>	
+					<h:outputLabel value="Distrito:"/>
+					<p:selectOneRadio value="#{municipioDistritoBean.municipioD.distrito}" required="true" requiredMessage="Marque se municipio/distrito">
+			            <f:selectItem itemLabel="Sim" itemValue="1" />
+			            <f:selectItem itemLabel="Não" itemValue="0" />			            
+			        </p:selectOneRadio>		
+			        <h:outputLabel value="Entrância:"/>
+			        <p:inputText value="#{municipioDistritoBean.municipioD.entrancia}" size="50"/>							
+			        <h:outputLabel value="Regional:"/>
+			        <p:selectOneMenu value="#{municipioDistritoBean.municipioD.regional}" converter="regionalConverter">
+						<f:selectItems value="#{regionalBean.selecionarTudo}" var="r" itemValue="#{r}" itemLabel="#{r.nome}" />								
+					</p:selectOneMenu>														
+					<h:outputText/>
+					<h:panelGroup>
+						<p:commandButton value="#{municipioDistritoBean.municipioD.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{municipioDistritoBean.insert}" process="painelMunicipioD" update=":form_municipioD" style="width:100px"/>
+						<p:commandButton value="Criar Novo" action="#{municipioDistritoBean.criarNovo}" process="@this" update="painelMunicipioD,:form_municipioD:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			<p:separator/>
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaMunicipioDs" value="#{municipioDistritoBean.allMunicipioDistrito}" var="m" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="20">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{m.id}"/>
+				</p:column>
+				<p:column sortBy="#{m.nome}" filterBy="#{m.nome}">
+					<f:facet name="header">
+						<h:outputText value="MUNICÍPIO"/>
+					</f:facet>
+					<h:outputText value="#{m.nome}"/>
+				</p:column>
+				<p:column sortBy="#{m.estado.nome}" filterBy="#{m.estado.nome}">
+					<f:facet name="header">
+						<h:outputText value="ESTADO"/>
+					</f:facet>
+					<h:outputText value="#{m.estado.nome}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="DISTRITO"/>
+					</f:facet>
+					<h:outputText value="#{m.distrito == 1 ? 'Sim':'Não'}"/>
+				</p:column>				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="ENTRÂNCIA"/>
+					</f:facet>
+					<h:outputText value="#{m.entrancia}"/>
+				</p:column>				
+				<p:column sortBy="#{m.regional.nome}" filterBy="#{m.regional.nome}">
+					<f:facet name="header">
+						<h:outputText value="REGIONAL"/>
+					</f:facet>
+					<h:outputText value="#{m.regional.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="3" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form_municipioD:painelMunicipioD" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{municipioDistritoBean.municipioD}" value="#{m}"/>
+						</p:commandButton>
+						
+						<p:button outcome="/admin/municipiosdistritos/bairro/index" title="Bairros"  icon="ui-icon-home" >
+							<f:param name="codMunicipio" value="#{m.id}"></f:param>					  
+							<f:param name="nomeMunicipio" value="#{m.nome}"></f:param>
+						</p:button>
+						
+						<p:commandButton title="Remover" action="#{municipioDistritoBean.excluir}" process="@this" update="listaMunicipioDs" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{municipioDistritoBean.municipioD}" value="#{m}"/>
+						</p:commandButton>
+					</p:panelGrid>
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

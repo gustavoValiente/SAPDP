@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/atendente/index.xhtml">
+	<ui:define name="conteudoAtendente">
+		<h3>Atualizar Dados de Usuário</h3>
+		<h:form id="form_usuarios">
+			<p:growl id="msg"/>
+			<p:tabView id="tabView" style="min-height:450px">
+				<p:tab id="tabDadosGerais" title="Dados Gerais" >
+					<ui:include src="/admin/usuarios/dadosBasicos.xhtml"></ui:include>
+					<ui:include src="/admin/usuarios/contatos.xhtml"></ui:include>
+					<p:commandButton id="save" value="#{usuarioBean.usuario.login == null ? 'Salvar' : 'Alterar'}" ajax="false"
+						action="#{usuarioBean.insert}" process=":form_usuarios:tabView:painelUsuarios" update=":form_usuarios:msg" style="width:100px"/>
+					<p:commandButton value="Criar Novo" action="#{usuarioBean.criarNova}" process="@this" update=":form_usuarios:tabView:,:form_usuarios:msg" style="width:100px"/>
+					<br/>
+					<h:outputText value="Data cadastro : " rendered="#{usuarioBean.usuario.dataCadastro != null}"/>
+					<h:outputText value="#{usuarioBean.usuario.dataCadastro}"/>
+					<br/>
+					<h:outputText value="Data alteração : " rendered="#{usuarioBean.usuario.dataAlteracao != null}"/>
+					<h:outputText value="#{usuarioBean.usuario.dataAlteracao}"/>		
+				</p:tab>
+				<p:tab id="tabDadosAssessoria" title="Dados Assessoria" disabled="#{usuarioBean.usuario.dataCadastro == null or (usuarioBean.grupo == 'ATENDENTE' or usuarioBean.grupo == 'VISITANTE' or usuarioBean.grupo == 'ASSESSOR' or usuarioBean.grupo == 'ESTAGIARIO')}">
+					<ui:include src="/admin/usuarios/dadosAssessoria.xhtml"></ui:include>
+				</p:tab>
+			</p:tabView>
+			<p:separator/>
+		</h:form>
+	</ui:define>
+</ui:composition>

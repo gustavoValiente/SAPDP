@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Nacionalidades</h3>
+		<h:form id="form_nacionalidades">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Nacionalidade" id="painelNacionalidade" >
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{nacionalidadeBean.nacionalidade.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:panelGroup>
+						<p:commandButton value="#{nacionalidadeBean.nacionalidade.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{nacionalidadeBean.insert}" process="painelNacionalidade" update="form_nacionalidades" style="width:100px"/>
+						<p:commandButton value="Criar Nova" action="#{nacionalidadeBean.criarNova}" process="@this" update="painelNacionalidade,form_nacionalidades:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaNacionalidade" value="#{nacionalidadeBean.allNacionalidade}" var="n" emptyMessage="Nenhum registro encontrado." paginator="true" rows="20" lazy="true">
+				<p:column sortBy="#{n.id}" style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{n.id}"/>
+				</p:column>
+				<p:column sortBy="#{n.nome}" filterBy="#{n.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{n.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form_nacionalidades:painelNacionalidade" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{nacionalidadeBean.nacionalidade}" value="#{n}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{nacionalidadeBean.excluir}" process="@this" update="listaNacionalidade" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{nacionalidadeBean.nacionalidade}" value="#{n}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

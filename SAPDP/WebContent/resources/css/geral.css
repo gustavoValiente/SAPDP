@@ -1,0 +1,50 @@
+/*#############################################################
+
+#############################################################*/
+.pnlInicial{
+	width: 99%;height: 310px;-moz-box-shadow: -3px -3px 3px #888;-webkit-box-shadow: 3px 3px 3px #888;box-shadow: 3px 3px 3px #888;
+}
+#tabelaCentral{
+	width:100%;height: 650px;
+}
+#tabelaCentral td{
+	width:50%;
+}
+#barra{
+	bottom: 0; display: block; height: 30px; position: fixed; width: 100%; text-align:right;font-size:11px;color:#FFF;background-color: rgba(15, 87,11, 0.7);
+	border-top:solid;border-top-width:1px;border-top-color: #000;	
+}
+.tabelaGerenciador{
+	width: 100%;
+	height: inherit;
+}
+.tabelaGerenciador #colunaEsquerda{
+	width:150px;
+	vertical-align:top;
+	height: 100%;
+}
+
+.tabelaGerenciador #colunaDireita{
+	vertical-align:top;
+	height: 100%;
+}
+h3{color: #006400;padding: 0px;text-indent: 6px;margin: 2px;}
+
+.preferencial{
+	color:red;
+}
+
+.substituicao{
+	color:green;
+}
+
+#form_registra .tam_coluna{
+	width: 24% !important;
+}
+.ui-dialog.ui-widget-content .ui-dialog-title{
+	font-size:15px !important;
+}
+
+.filtroLabel{
+	margin-left: 15px;
+}

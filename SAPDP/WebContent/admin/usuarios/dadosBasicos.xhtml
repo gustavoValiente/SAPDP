@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			<p:panelGrid columns="4">
+				<h:outputLabel value="Nome:"/>
+				<p:inputText value="#{usuarioBean.usuario.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+				<h:outputLabel value="Login:"/>
+				<p:inputText id="login" value="#{usuarioBean.usuario.login}" required="true" requiredMessage="Informe o login" size="25"/>				
+				<h:outputLabel value="Grupo: "/>
+				<p:selectOneMenu value="#{usuarioBean.grupo}" converter="grupoConverter" required="true" requiredMessage="Selecione um grupo">
+					<f:selectItems value="#{usuarioBean.selectItemsGrupo}"/>
+				</p:selectOneMenu>	
+				<h:outputLabel value="Status: "/>
+				<p:selectOneRadio value="#{usuarioBean.usuario.status}" required="true" requiredMessage="Marque o status">
+		            <f:selectItem itemLabel="Ativo" itemValue="1" />
+		            <f:selectItem itemLabel="Inativo" itemValue="0" />			            
+		        </p:selectOneRadio>
+		        <h:outputLabel value="Município/Distrito:"/>				        
+		        <p:autoComplete id="event" value="#{usuarioBean.municipioDistritoBean.municipioD.nome}" maxResults="8" placeholder="Busque o municipio/distrito..." required="true" requiredMessage="Municipio Obrigatório!"
+		        	completeMethod="#{usuarioBean.municipioDistritoBean.filtrarMunicipiosDistritos}" size="50">
+		            <p:ajax event="itemSelect" listener="#{usuarioBean.onItemSelect}" process="@this" update=":form_usuarios:msg, :form_usuarios:tabView:slcUnidade" />
+		        </p:autoComplete>
+		        <h:outputText/><h:outputText />
+		        <h:outputLabel value="Unidade:"/>
+		        <p:selectOneMenu id="slcUnidade" value="#{usuarioBean.unidadeBean.unidade}" disabled="#{empty usuarioBean.municipioDistritoBean.municipioD.nome}"  converter="unidadeConverter" required="true"  requiredMessage="Unidade Obrigatória!">
+		       		<f:selectItems value="#{usuarioBean.unidadeBean.unidades}" var="u" itemLabel="#{u.nome}" itemValue="#{u}"/> 
+		        </p:selectOneMenu>
+		        				
+		        <h:outputLabel value="Sala:"/>
+				<p:inputText value="#{usuarioBean.usuario.sala}" size="10"/>
+		        
+     		    <h:outputLabel value="Defensoria: "/>					
+				<p:selectOneMenu value="#{usuarioBean.defensoriaBean.defensoria}" required="true" converter="defensoriaConverter"
+					requiredMessage="Selecione a defensoria" filter="true" filterMatchMode="contains"
+					disabled="#{usuarioBean.grupo == 'ATENDENTE' or usuarioBean.grupo == 'VISITANTE' or 
+						usuarioBean.grupo == 'ASSESSOR' or usuarioBean.grupo == 'ESTAGIARIO' }">	
+					<f:selectItem itemLabel="Selecione..." noSelectionOption="true" itemValue="" />				
+					<f:selectItems value="#{usuarioBean.defensoriaBean.defensorias}" var="d" itemLabel="#{d.nome}" itemValue="#{d}"/>										 	
+				</p:selectOneMenu>	
+				<h:outputLabel value="Substituição: "/>
+				<p:selectOneMenu value="#{usuarioBean.usuarioSubstituicao}" converter="substituicaoConverter"  
+					filter="true" filterMatchMode="contains"
+					disabled="#{usuarioBean.grupo == 'ATENDENTE' or usuarioBean.grupo == 'VISITANTE' or 
+						usuarioBean.grupo == 'ASSESSOR' or usuarioBean.grupo == 'ESTAGIARIO'}">
+					<f:selectItem itemLabel="Selecione..." noSelectionOption="true"/>
+					<f:selectItems value="#{usuarioBean.usuariosSubstituicao}" var="u" itemLabel="#{u.nomeDefensorSubstituto}" itemValue="#{u}" 
+						itemDisabled="#{usuarioBean.usuario.login == u.loginSubstituicao? 'true':''}" />
+				</p:selectOneMenu>
+		        
+		        <h:outputLabel for="pwd1" value="SENHA: *" />			
+				<p:password id="pwd1" value="#{usuarioBean.usuario.senha}" redisplay="true" style="font-size:13px;" 
+				size="15" match="pwd2" label="Senha" required="#{usuarioBean.usuario.dataCadastro == null}" feedback="true" 
+				goodLabel="Boa.." promptLabel="Digite a senha..." strongLabel="Excelente..." weakLabel="Ruim..."
+				/>
+				<h:outputLabel for="pwd2" value="CONFIRMAÇÃO: *" />
+				<p:password id="pwd2" value="#{usuarioBean.usuario.senha}" redisplay="true"  style="font-size:13px;"
+							 size="15" label="Confirmacao" required="#{usuarioBean.usuario.dataCadastro == null}"/>							 
+		    				
+			</p:panelGrid>
+</ui:composition>

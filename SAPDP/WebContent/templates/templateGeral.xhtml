@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>SAPDP</title>
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="geral.css" library="css" />
+	<h:outputScript name="scripts.js" library="js" />
+	<h:outputStylesheet name="login.css" library="css" />
+	<h:outputScript name="jquery.maskedinput.js" library="js"/>
+	<script type="text/javascript">
+		jQuery(function($){  
+		    $("input.maskData:text").mask("99/99/9999");
+		});
+		
+	</script>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/favicon.ico"/>
+</h:head>
+<h:body>
+	<h:form>
+		<p:menubar style="height:24px"> 
+			<p:menuitem value="Inicio" icon="ui-icon-triangle-1-e"/>
+			<p:menuitem value="Atendente" outcome="/atendente/index"  icon="ui-icon-tag"/>
+			<p:menuitem value="Defensor" outcome="/defensor/index"  icon="ui-icon-bookmark"/>
+			<p:submenu label="Módulos" icon="ui-icon-bookmark">
+				<p:menuitem value="Execução Penal" outcome="/modulos/penal/index" icon="ui-icon-bookmark"/>
+			</p:submenu>
+			<p:menuitem value="Admin" outcome="/admin/index" icon="ui-icon-locked"/>
+			<p:menuitem value="Perfil" outcome="/atualizarDados" ajax="false" icon="ui-icon-triangle-1-e">
+         		<f:param name="codUsuario" value="#{sessionScope.usuario.login}"></f:param>	
+         	</p:menuitem>
+			<p:menuitem value="Sair" ajax="false" action="#{autenticadorBean.logout}" icon="ui-icon-power"/>
+		</p:menubar>
+	</h:form>
+	<ui:insert name="conteudo">
+		<h3>---- Conteúdo Dinâmico aqui ----</h3>
+	</ui:insert>
+</h:body>
+</html>

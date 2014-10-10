@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Autenticação SAPDP</title>
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="login.css" library="css" />
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/favicon.ico"/>
+</h:head>
+<h:body>
+	<h:form>
+		<p:growl errorClass="errorMessage" infoClass="infoMessage" warnClass="warnMessage" />
+		<center>
+			<p:menubar style="height:24px"/>
+			<p:panel id="pl" styleClass="painelLogin">
+			
+				<p:focus context="pl"/>
+				
+				<h:panelGrid columns="3">
+					<h:panelGrid columns="2">
+						<h:outputText value="USUÁRIO : " styleClass="txtColorDP"/>
+						<p:inputText id="username" value="#{autenticadorBean.username}" styleClass="txtColorDP"/>
+	
+						<h:outputText value="SENHA : " styleClass="txtColorDP"/>
+						<p:password id="password" value="#{autenticadorBean.password}" styleClass="txtColorDP"/>
+						
+						<p:commandButton value="Acessar" ajax="false"
+							action="#{autenticadorBean.login}" type="submit" />
+					</h:panelGrid>
+					<p:separator styleClass="separadorLogin" />
+					<h:panelGrid columns="2" id="pg2">
+						<p:graphicImage url="/resources/img/logo.png" height="130"/>
+						<h2 style="margin:0px;font-size:26px;color:#006400">SAPDP</h2>
+						<h2 style="margin:0px;font-size:11px;color:#006400">Defensoria Pública de MS.</h2>
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+		</center>
+	</h:form>
+	<ui:include src="/rodape.xhtml"/>	
+</h:body>
+</html>

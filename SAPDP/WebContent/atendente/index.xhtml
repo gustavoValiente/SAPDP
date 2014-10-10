@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/templates/templateGeral.xhtml">
+	
+	<ui:define name="conteudo">	
+		<table class="tabelaAtendente">
+			<tr>
+				<td id="colunaEsquerda" valign="top">
+					<h:form id="formMenu">
+						 <p:menu style="width:180px" >
+					        <p:submenu label="Dados Atendimento" icon="ui-icon-plus">
+					            <p:menuitem value="Assistidos" outcome="/atendente/tabela_assistidos" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Designações" outcome="/atendente/designacoes" icon="ui-icon-triangle-1-e" />
+					        </p:submenu>
+					    </p:menu>
+				    </h:form>
+				</td>
+				<td id="colunaDireita" valign="top">
+					<ui:insert name="conteudoAtendente">
+						<h3>Escolha uma operação no menu</h3>
+					</ui:insert>
+				</td>
+			</tr>
+		</table>
+		<ui:include src="/confirmDialog.xhtml"/>	
+		<ui:include src="/rodape.xhtml"/>
+	</ui:define>
+</ui:composition>

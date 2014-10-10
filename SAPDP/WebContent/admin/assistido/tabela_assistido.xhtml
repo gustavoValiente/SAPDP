@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<h:form id="form_assistido">
+		
+		<p:growl id="msg" sticky="true" showDetail="true"/>
+		
+		<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+		<p:dataTable id="listaAssistidos" value="#{gerenciaAtendimentoBean.assistidoBean.allAssistido}" var="a" emptyMessage="Nenhum registro encontrado."  paginator="true" lazy="true" rows="12">
+			<f:facet name="header">
+				<p:commandButton value="Criar Novo" icon="ui-icon-copy" action="#{gerenciaAtendimentoBean.assistidoBean.criarNovo}" ajax="false" style="width:120px"/>
+			</f:facet>
+			<p:column style="width:50px">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+				<h:outputText value="#{a.id}"/>
+			</p:column>
+			<p:column sortBy="#{a.nome}" filterBy="#{a.nome}">
+				<f:facet name="header">
+					<h:outputText value="ASSISTIDO"/>
+				</f:facet>
+				<h:outputText value="#{a.nome}"/>
+			</p:column>
+			<p:column sortBy="#{a.mae}" filterBy="#{a.mae}">
+				<f:facet name="header">
+					<h:outputText value="MÃE"/>
+				</f:facet>
+				<h:outputText value="#{a.mae}"/>
+			</p:column>
+			<p:column sortBy="#{a.pai}" filterBy="#{a.pai}">
+				<f:facet name="header">
+					<h:outputText value="PAI"/>
+				</f:facet>
+				<h:outputText value="#{a.pai}"/>
+			</p:column>
+			<p:column sortBy="#{a.cpf}" filterBy="#{a.cpf}" style="width:110px; text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="CPF"/>
+				</f:facet>
+				<h:outputText value="#{a.cpf}"/>
+			</p:column>		
+			<p:column sortBy="#{a.rg}" filterBy="#{a.rg}" style="width:120px;">
+				<f:facet name="header">
+					<h:outputText value="RG"/>
+				</f:facet>
+				<h:outputText value="#{a.rg}"/>
+			</p:column>	
+			<p:column style="width:70px;">
+				<f:facet name="header">
+					<h:outputText value="Data Nasc."/>
+				</f:facet>
+				<h:outputText value="#{a.dataNascimento}">
+					<f:convertDateTime pattern="dd/MM/yyyy"/>	
+				</h:outputText>		
+			</p:column>
+			<p:column style="width:150px">
+				<f:facet name="header">
+					<h:outputText value="OPERAÇÕES" />
+				</f:facet>
+				<p:panelGrid columns="3" style="text-align:center">					
+					<p:commandButton title="Visualizar Assistido" action="#{gerenciaAtendimentoBean.direcionaLink}" ajax="false" icon="ui-icon-search" >
+						<f:param name="codAssistido" value="#{a.id}"></f:param>
+					</p:commandButton>
+					<p:commandButton title="Designar Assistido" action="#{gerenciaAtendimentoBean.direcionaLink}" ajax="false" icon="ui-icon-arrowthickstop-1-e" >
+						<f:param name="codAssistido" value="#{a.id}"></f:param>
+						<f:param name="designar" value="true"></f:param>
+					</p:commandButton>
+					<p:commandButton title="Remover" action="#{gerenciaAtendimentoBean.assistidoBean.excluir}" process="@this" update="listaAssistidos" icon="ui-icon-close">
+						<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+						<f:setPropertyActionListener target="#{gerenciaAtendimentoBean.assistidoBean.assistido}" value="#{a}"/>
+					</p:commandButton>
+				</p:panelGrid>				
+			</p:column>
+		</p:dataTable>
+	</h:form>	
+	
+</ui:composition>
+
+		

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			
+	 	<h:form id="form_espera">
+	 		<p:growl id="msg" />
+	 		
+			<p:contextMenu id="contextMenu" for="listaAssistidoEspera" >
+		        <p:menuitem id="chamar" value="Chamar" update="listaAssistidoEspera" action="#{gerenciaAtendimentoBean.chamarAssistido}" icon="ui-icon-volume-on" 
+		        	/>
+		        <p:menuitem id="atender" value="Atender" update=":form_dialogFato:dialogFato, :form_registra:pGridAtender, :historico_atendidos:panelHistAssis, :form_espera:msg" 
+		        	action="#{gerenciaAtendimentoBean.atenderAssistido}" icon="ui-icon-person" />
+		        <p:menuitem id="cancelar" value="Cancelar" update=":form_atendidos:panelAtendidos, listaAssistidoEspera" 
+		        	action="#{gerenciaAtendimentoBean.cancelarDesignacao}"	icon="ui-icon-close" />	        	
+		        
+		    </p:contextMenu>
+	    
+			<p:panel header="Assistidos em Espera - atualizado em #{gerenciaAtendimentoBean.dataAtualizacaoPainel} " id="panelEspera"  closable="true" toggleSpeed="500" closeSpeed="500" styleClass="pnlInicial">
+				<p:poll interval="3" listener="#{gerenciaAtendimentoBean.atualizarPainelAssistidosEmEspera}" update="panelEspera"
+				 autoStart="true" />		
+				<p:dataTable id="listaAssistidoEspera" value="#{gerenciaAtendimentoBean.designacaoBean.simpleDesignacoes}" emptyMessage="Nenhum registro encontrado!"
+					var="d" style="width:100%;" scrollable="true" scrollHeight="230"
+					rowKey="#{d.idDesignacao}" selection="#{gerenciaAtendimentoBean.designacaoBean.simpleDesignacao}" selectionMode="single">				            
+					 						    
+					    <p:column headerText="Nome Assistido">
+					        <h:outputText value="#{d.nomeAssistido}" />
+					        <h:outputText value=" #{d.loginSubstituicao != NULL ? 'SUBSTITUIÇÃO' : '' }" style="width:75px; float:right; color:green" />
+					        <h:outputText value=" #{d.idAtendimentoPai == NULL ? '' : '(RETORNO)' }" style="width:68px; float:right; color:blue" />
+					    </p:column>
+					    
+				     	<p:column headerText="Preferencial" style="width:85px; text-align:center;" sortBy="#{d.preferencial}" >
+					        <h:outputText value="#{d.preferencial}" styleClass="#{d.preferencial eq 'SIM' ? 'preferencial' : null}"  />
+					    </p:column>
+					    
+					    <p:column headerText="Status" style="width:60px; text-align:center;">
+					        <h:outputText value="#{d.statusDesignacao}" />
+					    </p:column>
+					 
+					    <p:column headerText="Hora Desig." style="width:80px; text-align:center;" sortBy="#{d.dataDesignacao}">
+					        <h:outputText value="#{d.dataDesignacao}">
+					        	<f:convertDateTime pattern="HH:mm:ss" locale="pt_BR" timeZone="GMT-4"></f:convertDateTime>
+					        </h:outputText>
+					    </p:column>
+							 
+		        </p:dataTable>
+    							
+			</p:panel>
+			
+		</h:form>					
+	
+</ui:composition>

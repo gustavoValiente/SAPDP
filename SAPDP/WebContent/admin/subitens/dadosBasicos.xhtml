@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<!-- Painel -->
+		<p:panel  id="painelSubItens" >
+			<p:panelGrid columns="2" >
+				<h:outputLabel value="Nome: "/>
+				<p:inputText value="#{subItemBean.subitem.nome}" required="true" requiredMessage="Informe o nome do subItem" size="50"/>				
+			</p:panelGrid>
+		</p:panel>
+</ui:composition>

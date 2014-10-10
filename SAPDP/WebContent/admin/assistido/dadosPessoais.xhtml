@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="4" id="gridDadosAssis">
+		<h:outputLabel value="Nome:"/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+		<h:outputLabel value="RG:"/>
+		<p:inputText  value="#{gerenciaAtendimentoBean.assistidoBean.assistido.rg}" size="14"/>
+		<h:outputLabel value="CPF:"/>
+		<p:inputMask mask="999.999.999-99" value="#{gerenciaAtendimentoBean.assistidoBean.assistido.cpf}" size="14" maxlength="14"/>					
+		<h:outputLabel value="Data Nascimento:"/>					
+		<p:calendar value="#{gerenciaAtendimentoBean.assistidoBean.assistido.dataNascimento}" style="font-size:13px;" size="15" locale="pt_BR"/>					
+		<h:outputLabel value="Mãe:"/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.mae}" size="50"/>
+		<h:outputLabel value="Pai:"/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.pai}" size="50"/>					
+		<h:outputLabel value="Profissão:"/>	
+		<p:autoComplete id="event" value="#{gerenciaAtendimentoBean.assistidoBean.profissaoBean.profissao.nome}" maxResults="8" placeholder="Busque a profissão..." required="true" requiredMessage="Profissão Obrigatória!"
+	       	completeMethod="#{gerenciaAtendimentoBean.assistidoBean.profissaoBean.filtrarProfissoes}" size="50">
+	           <p:ajax event="itemSelect" listener="#{gerenciaAtendimentoBean.assistidoBean.profissaoBean.onItemSelect}" update=":form_assistido:msg" />
+	       </p:autoComplete>
+		<h:outputLabel value="Estado Civil:"/>
+		<p:selectOneMenu value="#{gerenciaAtendimentoBean.assistidoBean.assistido.estadoCivil}" converter="estadoCivilConverter" required="true" requiredMessage="Selecione o estado civil">
+			<f:selectItems value="#{gerenciaAtendimentoBean.assistidoBean.obterTodosEstadosCivis}" var="u"/>
+		</p:selectOneMenu>
+		<h:outputLabel value="Raça:"/>
+		<p:selectOneMenu value="#{gerenciaAtendimentoBean.assistidoBean.assistido.raca}" converter="racaConverter" required="true" requiredMessage="Selecione a raça">
+			<f:selectItems value="#{gerenciaAtendimentoBean.assistidoBean.obterTodasRacas}" var="u"/>
+		</p:selectOneMenu>
+		<h:outputLabel value="Sexo:"/>
+		<p:selectOneMenu value="#{gerenciaAtendimentoBean.assistidoBean.assistido.sexo}" required="true" requiredMessage="Selecione o sexo">
+			<f:selectItems value="#{gerenciaAtendimentoBean.assistidoBean.obterTodosSexos}" var="s" itemLabel="#{s.texto}" itemValue="#{s}"/>
+		</p:selectOneMenu>
+		<h:outputLabel value="Orgão Expedidor:"/>
+		<p:selectOneMenu value="#{gerenciaAtendimentoBean.assistidoBean.assistido.orgaoExpedidor}" converter="orgaoExpedidorConverter" required="true" requiredMessage="Selecione o orgão expedidor">
+			<f:selectItems value="#{gerenciaAtendimentoBean.assistidoBean.obterTodosOrgaosExpedidores}" var="o"/>
+		</p:selectOneMenu>
+		<h:outputLabel value="Nacionalidade:"/>
+		<p:selectOneMenu value="#{gerenciaAtendimentoBean.assistidoBean.assistido.nacionalidade}" converter="nacionalidadeConverter">
+			<f:selectItems value="#{nacionalidadeBean.selecionarTudo}" var="n" itemValue="#{n}" itemLabel="#{n.nome}" />								
+		</p:selectOneMenu>
+		<h:outputLabel value="Celular: "/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.celular}"/>
+		<h:outputLabel value="Telefone 1: "/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.telefone1}"/>
+		<h:outputLabel value="Telefone 2: "/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.telefone2}"/>
+		<h:outputLabel value="Telefone 3: "/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.telefone3}"/>
+		<h:outputLabel value="Email: "/>
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.email}" size="38"/>	
+	</p:panelGrid>		
+</ui:composition>

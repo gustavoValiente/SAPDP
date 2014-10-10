@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<!-- Painel -->
+		<p:panel  id="painelDefensorias" >
+			<p:panelGrid columns="2" >
+				<h:outputLabel value="Nome: "/>
+				<p:inputText value="#{defensoriaBean.defensoria.nome}" required="true" requiredMessage="Informe o nome da defensoria" size="50"/>
+				<h:outputLabel value="Município da Defensoria: "/>
+		        <p:autoComplete id="event" value="#{defensoriaBean.municipioDistritoBean.municipioD.nome}"  required="true" requiredMessage="Municipio Obrigatório!"
+		        	completeMethod="#{defensoriaBean.municipioDistritoBean.filtrarMunicipiosDistritos}" size="50">
+		            <p:ajax event="itemSelect" listener="#{defensoriaBean.municipioDistritoBean.onItemSelect}" update=":form_defensorias:msg" />
+		        </p:autoComplete>
+			</p:panelGrid>
+		</p:panel>
+</ui:composition>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Painel SAPDP</title>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/favicon.ico"/>
+</h:head>
+<h:body>
+	<h:form id="form_painel">
+		<p:layout fullPage="true"> 
+		    <p:layoutUnit position="center">
+		         <p:poll interval="30" listener="#{painelSenhasBean.carregarUltimasSenhasDoPainel}" update="panelSenha"
+					 autoStart="true">
+				 		
+				 </p:poll>
+				 <p:panel id="panelSenha">
+				 	<p:media value="http://sistemas.defensoria.ms.gov.br/campainha.mp3" rendered="#{!empty painelSenhasBean.infoDesignacao.senha}" height="0" player="quicktime">
+					    <f:param name="autoPlay" value="true" />
+					</p:media>
+				 	<table width="100%" style="padding:0px;margin:0px">
+				 		<tr style="line-height: 40px">
+				 			<td style="text-align:center;font-size:80px;font-weight: bold;color: #006400">
+				 				<h:outputText value="SENHA"/>
+				 			</td>
+				 			<td style="text-align:center;font-size:80px;font-weight: bold;color: #006400">
+				 				<h:outputText value="#{painelSenhasBean.painel.tipoChamadoSenha}"/>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td style="text-align:center;font-size:300px;font-weight: bold">
+				 				<h:outputText value="#{painelSenhasBean.infoDesignacao.senha}"/>
+							</td>
+							<td style="text-align:center;font-size:300px;font-weight: bold">
+								<h:outputText value="#{painelSenhasBean.infoDesignacao.sala}"/>
+							</td>  
+				 		</tr>
+				 		<tr>
+				 			<td align="center" colspan="2" >
+				 				<h:outputText value="#{painelSenhasBean.infoDesignacao.preferencial eq 'SIM' ? 'PREFERENCIAL' : ''}" style="color:red;font-size:80px"/>
+				 			</td>
+				 		</tr>
+				 	</table>				
+				 </p:panel>
+				 <p:separator/>
+				 <font size="+3">
+				 	<p:clock pattern="dd/MM/yyyy HH:mm:ss" />	
+		    	 </font>
+		    </p:layoutUnit>
+		</p:layout>
+	</h:form>		
+</h:body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<h:form id="form_assistido">	
+		<p:growl id="msg" />
+		
+		<p:tabView id="tabView" style="min-height:360px" activeIndex="#{gerenciaAtendimentoBean.designar == true ? '1' : '0'}">				
+			<p:tab id="tabDadosPessoais" title="Dados Pessoais">			
+				<p:panel header="Inserir/Alterar Assistidos" id="painelAssistido" toggleable="true">	
+					<p:commandButton value="#{gerenciaAtendimentoBean.assistidoBean.assistido.id == null ? 'Salvar' : 'Alterar'} Dados" 
+						icon="ui-icon-disk" action="#{gerenciaAtendimentoBean.assistidoBean.insert}" 
+						process=":form_assistido:tabView:tabDadosPessoais" update=":form_assistido:tabView:painelAssistido, :form_assistido:tabView:painelDesignacoes,:form_assistido:msg" 
+						style="width:120px">												  
+					</p:commandButton>					
+					
+					<p:commandButton value="Criar Novo" icon="ui-icon-copy" action="#{gerenciaAtendimentoBean.assistidoBean.criarNovo}" process="@this" update=":form_assistido:tabView:painelAssistido,:form_assistido:msg" style="width:120px"/>
+					<p:commandButton value="Imprimir" type="button" icon="ui-icon-print" style="width:120px">
+					    <p:printer target="painelAssistido" />
+					</p:commandButton>
+					<ui:include src="/admin/assistido/dadosPessoais.xhtml"></ui:include>
+					<p:separator></p:separator>
+					<ui:include src="/admin/assistido/enderecos.xhtml"></ui:include>
+				</p:panel>
+			</p:tab>
+			
+			<p:tab id="tabDesignacoes" style="min-height:360px" title="Designações">				
+				<p:panel header="Designar Assistido ao Defensor" id="painelDesignacoes" toggleable="true">				
+					<ui:include src="/admin/assistido/designacoes.xhtml"></ui:include>
+				</p:panel>
+				<p:commandButton value="Designar" title="Adicionar Designação"  actionListener="#{gerenciaAtendimentoBean.designarAssistido}" oncomplete="PF('confirmDesignacao').show();" icon="ui-icon-arrowthickstop-1-e"
+					 process=":form_assistido:tabView" update=":form_assistido:tabView:dadosDesignacao,:form_assistido:tabView:msgDesignacao" style="width:120px"/>
+				<br/><br/>
+				<ui:include src="/admin/assistido/dialogConfirmaDesignacao.xhtml"></ui:include>
+			</p:tab>
+		</p:tabView>
+	</h:form>
+		
+</ui:composition>

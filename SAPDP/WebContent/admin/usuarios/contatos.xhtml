@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+		<p:panelGrid>
+			<p:row>
+				<p:column>
+					<h:outputLabel value="Celular: "/>
+				</p:column>
+				<p:column>
+					<p:inputText value="#{usuarioBean.usuario.celular}"/>
+				</p:column>
+				<p:column>
+					<h:outputLabel value="Telefone 1: "/>
+				</p:column>
+				<p:column>
+					<p:inputText value="#{usuarioBean.usuario.telefone1}"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel value="Telefone 2: "/>
+				</p:column>
+				<p:column>	
+					<p:inputText value="#{usuarioBean.usuario.telefone2}"/>
+				</p:column>
+				<p:column>
+					<h:outputLabel value="Telefone 3: "/>
+				</p:column>
+				<p:column>
+					<p:inputText value="#{usuarioBean.usuario.telefone3}"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel value="Email: "/>
+				</p:column>
+				<p:column colspan="3">
+					<p:inputText value="#{usuarioBean.usuario.email}" size="65"/>	
+				</p:column>		
+			</p:row>
+		</p:panelGrid>
+</ui:composition>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Usuários</h3>
+		<h:form id="form_usuarios">
+			<p:growl id="msg"/>
+			<p:tabView id="tabView" style="min-height:450px">
+				<p:tab id="tabDadosGerais" title="Dados Gerais" >
+					<p:panel id="painelUsuarios" >
+						<ui:include src="/admin/usuarios/dadosBasicos.xhtml"></ui:include>
+						<ui:include src="/admin/usuarios/contatos.xhtml"></ui:include>
+					</p:panel>
+					<p:commandButton id="save" value="#{usuarioBean.usuario.login == null ? 'Salvar' : 'Alterar'}" 
+						action="#{usuarioBean.insert}" process=":form_usuarios:tabView:tabDadosGerais" update=":form_usuarios:msg" style="width:100px"/>
+					<p:commandButton value="Criar Novo" action="#{usuarioBean.criarNova}" process="@this" update=":form_usuarios:tabView,:form_usuarios:msg" style="width:100px"/>
+					<br/>
+					<h:outputText value="Data cadastro : " rendered="#{usuarioBean.usuario.dataCadastro != null}"/>
+					<h:outputText value="#{usuarioBean.usuario.dataCadastro}"/>
+					<br/>
+					<h:outputText value="Data alteração : " rendered="#{usuarioBean.usuario.dataAlteracao != null}"/>
+					<h:outputText value="#{usuarioBean.usuario.dataAlteracao}"/>		
+				</p:tab>
+				<p:tab id="tabDadosAssessoria" title="Dados Assessoria" disabled="#{usuarioBean.usuario.dataCadastro == null or (usuarioBean.grupo == 'ATENDENTE' or usuarioBean.grupo == 'VISITANTE' or usuarioBean.grupo == 'ASSESSOR' or usuarioBean.grupo == 'ESTAGIARIO')}">
+					<ui:include src="/admin/usuarios/dadosAssessoria.xhtml"></ui:include>
+				</p:tab>
+			</p:tabView>
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaUsuarios" value="#{usuarioBean.allUsuario}" var="u" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="10">
+				<p:column filterBy="#{u.login}" sortBy="#{u.login}" style="width:120px">
+					<f:facet name="header">
+						<h:outputText value="LOGIN"/>
+					</f:facet>
+					<h:outputText value="#{u.login}"/>
+				</p:column>
+				<p:column filterBy="#{u.nome}" sortBy="#{u.nome}" >
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{u.nome}"/>
+				</p:column>
+				<p:column sortBy="#{u.unidade.nome}" filterBy="#{u.unidade.nome}">
+					<f:facet name="header">
+						<h:outputText value="UNIDADE"/>
+					</f:facet>
+					<h:outputText value="#{u.unidade.nome}"/>
+				</p:column>
+				<p:column sortBy="#{u.grupo}" style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="GRUPO"/>
+					</f:facet>
+					<h:outputText value="#{u.grupo}"/>
+				</p:column>
+				<p:column sortBy="#{u.status}" style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="STATUS"/>
+					</f:facet>
+					<h:outputText value="#{u.status == 1 ? 'SIM' : 'NAO'}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" action="#{usuarioBean.normalizarInformacoes}"  process="@this" update=":form_usuarios" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{usuarioBean.usuario}" value="#{u}"/>
+							<f:param name="teste"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{usuarioBean.excluir}" process="@this" update="listaUsuarios,:form_usuarios:msg" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{usuarioBean.usuario}" value="#{u}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

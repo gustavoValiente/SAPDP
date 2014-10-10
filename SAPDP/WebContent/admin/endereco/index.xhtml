@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Endereços</h3>
+		<h:form id="form_endereco">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Endereço" id="painelEnderenco" >
+				<p:panelGrid columns="4" >
+					<h:outputLabel value="CEP:"/>
+					<h:panelGrid columns="2">
+						<p:inputMask mask="99999-999"  value="#{enderecoBean.endereco.cep}" required="true" requiredMessage="Informe o CEP" size="9">
+							<p:ajax event="blur" listener="#{enderecoBean.buscaCep}" update=":form_endereco:addBairroBtn, :form_endereco:bairroPanel, InputLogradouro, InputNum, event" process="@this"></p:ajax>
+						</p:inputMask>
+						<p:ajaxStatus style="margin-left:10px;">
+						    <f:facet name="start">
+						        <p:graphicImage url="/resources/img/103.gif" />
+						    </f:facet>
+						</p:ajaxStatus>
+					</h:panelGrid>				
+					<h:outputText/><h:outputText/>
+					<h:outputLabel value="Logradouro:"/>
+					<p:inputText id="InputLogradouro" value="#{enderecoBean.endereco.rua}" required="true" requiredMessage="Informe o logradouro" size="50"/>
+					<h:outputText/><h:outputText/>
+					<h:outputLabel value="Nº:"/>
+					<p:inputText id="InputNum" value="#{enderecoBean.endereco.numero}" size="30"/>
+					<h:outputText/><h:outputText/>
+					<h:outputLabel value="Bairro:"/>
+					<p:autoComplete id="event" value="#{enderecoBean.bairroBean.bairro.nome}" maxResults="8" placeholder="Busque o bairro..." required="true" requiredMessage="Bairro Obrigatório!"
+			        	completeMethod="#{enderecoBean.bairroBean.filtrarBairros}" size="50">
+			            <p:ajax event="itemSelect" listener="#{enderecoBean.bairroBean.onItemSelect}" update=":form_endereco:msg" />
+			        </p:autoComplete>
+			        <p:commandButton id="addBairroBtn" value="Cadastrar Bairro" type="button" icon="ui-icon-plusthick" update=":form_endereco:plBairro" disabled="#{not empty enderecoBean.bairroBean.bairro.nome}" />			        	
+			        
+			        <p:overlayPanel id="bairroPanel" for="addBairroBtn" hideEffect="fade" >
+			        	<p:panel header="Inserir/Alterar Bairros" id="plBairro">				
+							<p:panelGrid columns="2">
+								<h:outputLabel value="Nome:"/>
+								<p:inputText value="#{enderecoBean.nomeBairroTemp}" required="true" disabled="#{not empty enderecoBean.bairroBean.bairro.nome}" requiredMessage="Informe o nome" size="50"/>
+								<h:outputLabel value="Município:"/>
+								<p:autoComplete id="eventMunicipio" value="#{municipioDistritoBean.municipioD.nome}" maxResults="8" placeholder="Busque o município..." required="true" requiredMessage="Município Obrigatório!"
+						        	completeMethod="#{municipioDistritoBean.filtrarMunicipiosDistritos}" size="50">
+						            <p:ajax event="itemSelect" listener="#{municipioDistritoBean.onItemSelect}" update=":form_endereco:msg" />
+						        </p:autoComplete>
+								
+								<h:outputText/>
+								<h:panelGroup>
+									<p:commandButton value="Salvar" 
+										action="#{enderecoBean.insert2}" process="plBairro" update="@form, :form_endereco:addBairroBtn, :form_endereco:bairroPanel" style="width:100px">
+										<f:param name="nomeMunicipio" value="#{facesContext.externalContext.requestParameterMap.nomeMunicipio}"></f:param>
+									</p:commandButton>									
+								</h:panelGroup>
+							</p:panelGrid>
+						</p:panel>			        
+				    </p:overlayPanel>
+			        <h:outputText/>
+					<h:panelGroup>
+						<p:commandButton value="#{enderecoBean.endereco.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{enderecoBean.insert}" process="painelEnderenco" update=":form_endereco" style="width:100px"/>
+						<p:commandButton value="Criar Nova" action="#{enderecoBean.criarNova}" process="@this" update="painelEnderenco,:form_endereco:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaEnderenco" value="#{enderecoBean.allEndereco}" var="p" emptyMessage="Nenhum registro encontrado." paginator="true" rows="20" lazy="true">
+				<p:column sortBy="#{p.id}" style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{p.id}"/>
+				</p:column>
+				<p:column sortBy="#{p.rua}" filterBy="#{p.rua}">
+					<f:facet name="header">
+						<h:outputText value="RUA"/>
+					</f:facet>
+					<h:outputText value="#{p.rua}"/>
+				</p:column>
+				<p:column width="5%" style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Nº"/>
+					</f:facet>
+					<h:outputText value="#{p.numero}"/>
+				</p:column>
+				<p:column sortBy="#{p.bairro.nome}" filterBy="#{p.bairro.nome}">
+					<f:facet name="header">
+						<h:outputText value="BAIRRO"/>
+					</f:facet>
+					<h:outputText value="#{p.bairro.nome}"/>
+				</p:column>
+				<p:column filterBy="#{p.cep}">
+					<f:facet name="header">
+						<h:outputText value="CEP"/>
+					</f:facet>
+					<h:outputText value="#{p.cep}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" action="#{enderecoBean.selecionarNomeDoBairro}" update=":form_endereco:painelEnderenco" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{enderecoBean.endereco}" value="#{p}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{enderecoBean.excluir}" process="@this" update="listaEnderenco" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{enderecoBean.endereco}" value="#{p}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

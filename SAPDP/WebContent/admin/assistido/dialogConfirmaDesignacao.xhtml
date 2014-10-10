@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:dialog id="confirmDesignacao" header="Log Designação" widgetVar="confirmDesignacao" modal="true">
+		<p:messages id="msgDesignacao"/>
+		<h:panelGrid id="dadosDesignacao" columns="2">
+			<h:outputText value="ASSISTIDO : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>
+			<h:outputText value="DEFENSOR(A) : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.defensor.nome}"/>
+			<h:outputText value="SALA : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.defensor.sala}"/>
+			<h:outputText value="NÚCLEO : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.nucleo.nome}"/>
+			<h:outputText value="SENHA : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.senha}"/>
+			<h:outputText value="PREFERENCIAL : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.preferencial}"/>
+			<h:outputText value="ATENDENTE : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.atendente.nome}"/>
+			<h:outputText value="DATA/HORA : "/>
+			<h:outputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.dataDesignacao}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR" timeZone="GMT-4"/>
+			</h:outputText>
+		</h:panelGrid>
+		<p:commandButton value="Imprimir" type="button" icon="ui-icon-print" style="width:100px">
+		    <p:printer target="dadosDesignacao" />
+		</p:commandButton>
+	</p:dialog>	
+</ui:composition>

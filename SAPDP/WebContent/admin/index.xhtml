@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/templates/templateGeral.xhtml">
+	<ui:define name="conteudo">
+		<table class="tabelaGerenciador">
+			<tr>
+				<td id="colunaEsquerda">
+					<h:form id="formMenu">
+						 <p:menu style="width:180px" >
+					        <p:submenu label="Dados da Aplicação" icon="ui-icon-plus">
+					            <p:menuitem value="Estados" outcome="/admin/estados/index"  icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Municípios/Bairros"  outcome="/admin/municipiosdistritos/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Endereços"  outcome="/admin/endereco/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Profissões" outcome="/admin/profissao/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Nacionalidades" outcome="/admin/nacionalidades/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Regionais" outcome="/admin/regionais/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Defensorias" outcome="/admin/defensorias/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Núcleos" outcome="/admin/nucleos/index" icon="ui-icon-triangle-1-e" />
+					        </p:submenu>
+					        <p:submenu label="Dados Atendimento" icon="ui-icon-plus">
+					            <p:menuitem value="Assistidos" outcome="/admin/assistido/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Designações" outcome="/atendente/designacoes" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Unidades" outcome="/admin/unidades/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Itens" outcome="/admin/itens/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Subitens" outcome="/admin/subitens/index" icon="ui-icon-triangle-1-e" />
+					            <p:menuitem value="Estabelecimento Penal" outcome="/admin/estabelecimentoPenal/index" icon="ui-icon-triangle-1-e" />
+					        </p:submenu>
+					        <p:submenu label="Relatórios" icon="ui-icon-plus">
+					        
+					        </p:submenu>
+					        <p:submenu label="Configurações" icon="ui-icon-plus">
+					            <p:menuitem value="Usuários" outcome="/admin/usuarios/index"  icon="ui-icon-triangle-1-e"/>
+
+					        </p:submenu>
+					    </p:menu>
+				    </h:form>
+				</td>
+				<td id="colunaDireita">
+					<ui:insert name="conteudoGerenciador">
+						<h3>Escolha uma operação no menu</h3>
+					</ui:insert>
+				</td>
+			</tr>
+		</table>
+		<!-- Janela de confirmação global -->
+		<ui:include src="/confirmDialog.xhtml"/>
+		<ui:include src="/rodape.xhtml"/>	
+	</ui:define>
+</ui:composition>

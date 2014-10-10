@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			
+	 	<h:form id="form_atendidos">
+			<p:growl id="msg" />
+			
+			<p:panel id="panelAtendidos" header="Assistidos Atendidos"  closable="true" toggleSpeed="500" closeSpeed="500" styleClass="pnlInicial">
+				<p:dataTable id="tbAtendidos" value="#{gerenciaAtendimentoBean.simpleAtendimentosLazy}" var="a" 
+					emptyMessage="Nenhum registro encontrado." rows="10" lazy="true" paginator="true" paginatorPosition="bottom" 
+					disabled="#{empty gerenciaAtendimentoBean.atendimentoBean.simpleAtendimentosLazy}" 
+					selectionMode="single" selection="#{gerenciaAtendimentoBean.atendimentoBean.simpleAtendimento}" rowKey="#{a.idAtendimento}">
+					
+					<p:ajax event="rowSelect" listener="#{gerenciaAtendimentoBean.carregaAtendimento}" process="@this" 
+						update=":form_dialogFato:dialogFato,:form_registra:pGridAtender, :historico_atendidos:panelHistAssis" />
+					
+					<p:column style="width:40px" styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">
+							<h:outputText value="ID"/>
+						</f:facet>
+						<h:outputText value="#{a.idAtendimento}"/>
+					</p:column>
+					<p:column style="width:150px;" sortBy="#{a.nomeAssistido}" filterBy="#{a.nomeAssistido}"
+						styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">
+							<h:outputText value="ASSISTIDO"/>
+						</f:facet>
+						<h:outputText value="#{a.nomeAssistido}"/>
+					</p:column>
+					<p:column style="width:110px;" sortBy="#{a.nomeAtividade}" filterBy="#{a.nomeAtividade}"
+						styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">
+							<h:outputText value="ATIVIDADE"/>
+						</f:facet>
+						<h:outputText value="#{a.nomeAtividade}"/>
+					</p:column>	
+					<p:column style="width:110px;" sortBy="#{a.nomeProvidencia}" filterBy="#{a.nomeProvidencia}"
+						styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">
+							<h:outputText value="PROVIDÊNCIA"/>
+						</f:facet>
+						<h:outputText value="#{a.nomeProvidencia}"/>
+					</p:column>	
+					<p:column sortBy="#{a.nomeUnidade}" filterBy="#{a.nomeUnidade}" styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">
+							<h:outputText value="UNIDADE"/>
+						</f:facet>
+						<h:outputText value="#{a.nomeUnidade}"/>
+					</p:column>	
+					<p:column style="width:114px;" filterBy="#{a.dataAtendimento}" filterStyleClass="maskData" filterMatchMode="contains"
+						styleClass="#{a.loginSubstituicao ne null ? 'substituicao' : ''}">
+						<f:facet name="header">						
+							<h:outputText value="Data Atendimento"/>							
+						</f:facet>
+						<h:outputText value="#{a.dataAtendimento}" >
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"/>
+						</h:outputText>
+					</p:column>									
+				</p:dataTable>
+			</p:panel>
+			
+		</h:form>	
+</ui:composition>

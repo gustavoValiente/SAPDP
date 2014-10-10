@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="../templates/templateGeral.xhtml">
+	<ui:define name="conteudo">
+	
+		<table id="tabelaCentral">
+			<tr>
+				<td>
+				 	<ui:include src="form_assis_espera.xhtml"/>
+				</td>
+				<td>
+					<ui:include src="form_registra_atend.xhtml"/>
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					<ui:include src="form_assis_atendidos.xhtml"/>
+				</td>
+				<td>
+					<ui:include src="historico_atendimentos.xhtml"/>					
+				</td>
+			</tr>
+		</table>
+		
+		<h:form id="form_dialogFato">
+			<p:dialog header="Fato Narrado" id="dialogFato" widgetVar="dialogFato" minHeight="400" styleClass="dialog">
+				<p:panelGrid columns="1">					
+					<p:inputTextarea rows="20" autoResize="false" cols="85" value="#{gerenciaAtendimentoBean.atendimentoBean.atendimento.fatoNarrado}" />
+					<p:commandButton value="Salvar"	process=":form_dialogFato:dialogFato" update="dialogFato" style="width:115px"/>
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+		<p:dialog header="Informações Assistido" id="dialogAssistido" widgetVar="dialogAssistido" width="1000" height="480" styleClass="dialog">
+			<h:form id="form_assistido">
+				<p:growl id="msg" />
+				
+				<p:tabView id="tabView" style="min-height:360px">					
+					<p:tab title="Dados Pessoais">
+						<ui:include src="/admin/assistido/dadosPessoais.xhtml"></ui:include>	
+						<p:commandButton value="Alterar Dados" icon="ui-icon-disk"
+								action="#{gerenciaAtendimentoBean.assistidoBean.insert}" process=":form_assistido:tabView" update=":form_assistido,:form_registra:txt_nomeassis,:form_assistido:msg" style="width:120px"/>
+					</p:tab>
+					<p:tab title="Endereços">
+						<ui:include src="/admin/assistido/enderecos.xhtml"></ui:include>
+					</p:tab>								
+				</p:tabView>
+				<p:panelGrid columns="3">
+					<h:outputText value="Data Cadastro:"/>
+					<h:outputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.dataCadastro}">
+						<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"></f:convertDateTime>
+					</h:outputText>
+					<h:outputText value="( #{gerenciaAtendimentoBean.assistidoBean.assistido.usuarioCadastro} )" />				
+					<h:outputText value="Data Alteração:"/> 
+					<h:outputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.dataAlteracao}">
+						<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"></f:convertDateTime>
+					</h:outputText>
+					<h:outputText value="( #{gerenciaAtendimentoBean.assistidoBean.assistido.usuarioAlteracao} )"/>
+				</p:panelGrid>				
+				
+			</h:form>
+		</p:dialog>
+		<!-- Janela de confirmação global -->
+		<ui:include src="/confirmDialog.xhtml"/>
+		<ui:include src="/rodape.xhtml"/>
+						
+	</ui:define>
+</ui:composition>

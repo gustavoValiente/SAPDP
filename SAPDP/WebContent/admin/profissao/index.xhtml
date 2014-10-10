@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Profissões</h3>
+		<h:form id="form_profissao">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Profissão" id="painelProfissao" >
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{profissaoBean.profissao.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:panelGroup>
+						<p:commandButton value="#{profissaoBean.profissao.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{profissaoBean.insert}" process="painelProfissao" update=":form_profissao" style="width:100px"/>
+						<p:commandButton value="Criar Nova" action="#{profissaoBean.criarNova}" process="@this" update="painelProfissao,:form_profissao:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaProfissao" value="#{profissaoBean.allProfissao}" var="p" emptyMessage="Nenhum registro encontrado." paginator="true" rows="20" lazy="true">
+				<p:column sortBy="#{p.id}" style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{p.id}"/>
+				</p:column>
+				<p:column sortBy="#{p.nome}" filterBy="#{p.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{p.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form_profissao:painelProfissao" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{profissaoBean.profissao}" value="#{p}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{profissaoBean.excluir}" process="@this" update="listaProfissao" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{profissaoBean.profissao}" value="#{p}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

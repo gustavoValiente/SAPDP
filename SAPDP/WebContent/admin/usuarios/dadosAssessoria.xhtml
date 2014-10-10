@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<p:panel id="painelDadosAssessoria" >
+			<p:panelGrid columns="2">
+		        <h:outputLabel value="Município/Distrito:"/>				        
+		        <p:autoComplete id="event2" value="#{usuarioBean.municipioDistritoBean.municipioD.nome}" maxResults="8" placeholder="Busque o municipio/distrito..." 
+		        	completeMethod="#{usuarioBean.municipioDistritoBean.filtrarMunicipiosDistritos}" size="50">
+		            <p:ajax event="itemSelect" listener="#{usuarioBean.onItemSelect}" process="@this" update=":form_usuarios:msg, :form_usuarios:tabView:slcUnidade2" />
+		        </p:autoComplete>
+		        <h:outputLabel value="Unidade:"/>
+		        <p:selectOneMenu id="slcUnidade2" value="#{usuarioBean.unidadeBean.unidadeAssessoria}" disabled="#{empty usuarioBean.municipioDistritoBean.municipioD.nome}"  converter="unidadeConverter" >
+		       		<f:selectItems value="#{usuarioBean.unidadeBean.unidades}" var="u" itemLabel="#{u.nome}" itemValue="#{u}"/> 
+		        </p:selectOneMenu>
+		        <h:outputLabel value="Usuário Assessoria:"/>
+		        <p:autoComplete id="event3" value="#{usuarioBean.usuarioAssessoria.nome}" maxResults="8" placeholder="Busque usuários..."
+		        	completeMethod="#{usuarioBean.filtrarUsuariosPorNome}" size="50">
+		            <p:ajax event="itemSelect" listener="#{usuarioBean.onItemSelect2}" process="@this" update=":form_usuarios:msg" />
+		        </p:autoComplete>
+		        <h:outputLabel value="Sala:"/>
+				<p:inputText value="#{usuarioBean.dadosAssessoria.sala}" size="10"/>				
+			</p:panelGrid>
+			<p:commandButton id="saveDadosAssessoria" value="#{usuarioBean.dadosAssessoria.id == null ? 'Adicionar' : 'Alterar'}" 
+				action="#{usuarioBean.insertDadosAssessoria}" process=":form_usuarios:tabView:painelDadosAssessoria" update=":form_usuarios:tabView:painelDadosAssessoria, :form_usuarios:tabView:listaDadosAssessoria" style="width:100px"/>
+		</p:panel>
+		<p:separator></p:separator>
+		<p:dataTable id="listaDadosAssessoria" value="#{usuarioBean.usuario.dadosAssessoria}" var="da" emptyMessage="Nenhum registro encontrado." paginator="true" rows="10">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="UNIDADE"/>
+				</f:facet>
+				<h:outputText value="#{da.unidade.nome}"/>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="ASSESSORIA"/>
+				</f:facet>
+				<h:outputText value="#{da.usuario.nome}"/>
+			</p:column>	
+			<p:column style="width:30px">
+				<f:facet name="header">
+					<h:outputText value="SALA"/>
+				</f:facet>
+				<h:outputText value="#{da.sala}"/>
+			</p:column>	
+			<p:column style="text-align:center">
+				<f:facet name="header">
+					<h:outputText value="OPERAÇÕES"/>
+				</f:facet>
+				<p:commandButton title="Remover" action="#{usuarioBean.excluirDadosAssessoria}" process="@this" update="listaDadosAssessoria,:form_usuarios:msg" icon="ui-icon-close">
+					<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+					<f:setPropertyActionListener target="#{usuarioBean.dadosAssessoria}" value="#{da}"/>
+				</p:commandButton>
+			</p:column>					
+		</p:dataTable>			
+</ui:composition>

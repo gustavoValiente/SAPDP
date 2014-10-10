@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<div id="barra">
+		<table style="width:100%;font-family:'Verdana';font-size:14px; padding:0px;margin:0px">
+			<tr>
+				<td align="left" valign="top">
+					<table style="padding:0px;margin:0px">
+						<tr>
+							<td>
+								<h:graphicImage url="/resources/img/logo.png" width="23" height="23" />
+							</td>
+							<td>
+								Defensoria Pública de MS - SAPDP
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="600" align="right" valign="top">
+					<h:panelGrid columns="4" rendered="#{sessionScope.usuario != null}" style="padding:0px;margin:0px">				
+						<h:outputText value="Usuario : "/>
+						<h:outputText value="#{sessionScope.usuario.nome} / " style="color:#3333"/>
+						<h:outputText value="Grupo :"/>
+						<h:outputText value="#{sessionScope.usuario.grupo}" style="color:#3333"/> 
+					</h:panelGrid>	
+				</td>
+			</tr>
+		</table>		
+	</div>	
+</ui:composition>

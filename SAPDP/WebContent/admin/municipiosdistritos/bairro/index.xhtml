@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Bairros - #{facesContext.externalContext.requestParameterMap.nomeMunicipio}</h3>
+		<h:form id="form_bairro">
+			<p:growl id="msg"/>
+			
+				<!-- Painel -->
+				<p:panel header="Inserir/Alterar Bairros" id="painelBairro">
+				
+					<p:panelGrid columns="2" >
+						<h:outputLabel value="Nome:"/>
+						<p:inputText value="#{bairroBean.bairro.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+						
+						<h:outputText/>
+						<h:panelGroup>
+							<p:commandButton value="#{bairroBean.bairro.id == null ? 'Salvar' : 'Alterar'}" 
+								action="#{bairroBean.insert}" process="painelBairro" update="@form" style="width:100px">
+								<f:param name="nomeMunicipio" value="#{facesContext.externalContext.requestParameterMap.nomeMunicipio}"></f:param>
+							</p:commandButton>
+							<p:commandButton value="Criar Novo" action="#{bairroBean.criarNovo}" process="@this" update="painelBairro,:form_bairro:msg" style="width:100px">
+								<f:param name="nomeMunicipio" value="#{facesContext.externalContext.requestParameterMap.nomeMunicipio}"></f:param>
+							</p:commandButton>
+						</h:panelGroup>
+					</p:panelGrid>
+				</p:panel>
+				<p:separator/>
+				<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+				<p:dataTable id="listaBairros" value="#{bairroBean.allBairro}" var="m" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="20">
+					<p:column style="width:50px">
+						<f:facet name="header">
+							<h:outputText value="ID"/>
+						</f:facet>
+						<h:outputText value="#{m.id}"/>
+					</p:column>
+					<p:column sortBy="#{m.nome}" filterBy="#{m.nome}">
+						<f:facet name="header">
+							<h:outputText value="BAIRRO"/>
+						</f:facet>
+						<h:outputText value="#{m.nome}"/>
+					</p:column>
+					<p:column sortBy="#{m.municipio.nome}" filterBy="#{m.municipio.nome}">
+						<f:facet name="header">
+							<h:outputText value="MUNICÍPIO"/>
+						</f:facet>
+						<h:outputText value="#{m.municipio.nome}"/>
+					</p:column>
+					
+					<p:column style="width:150px">
+						<f:facet name="header">
+							<f:facet name="header">
+							<h:outputText value="OPERAÇÕES"/>
+						</f:facet>
+						<p:panelGrid columns="3" style="text-align:center">
+							<p:commandButton title="Visualizar" process="@this" update=":form_bairro:painelBairro" icon="ui-icon-search" >
+								<f:setPropertyActionListener target="#{bairroBean.bairro}" value="#{m}"/>
+								<f:setPropertyActionListener target="#{bairroBean.municipioDistritoBean.municipioD}" value="#{m.municipio}"/>
+								<f:param name="nomeMunicipio" value="#{facesContext.externalContext.requestParameterMap.nomeMunicipio}"></f:param>				
+							</p:commandButton>
+							
+							<p:button outcome="/admin/municipiosdistritos/index" title="Voltar"  icon="ui-icon-arrowreturnthick-1-w" >																					  
+							</p:button>
+				
+							<p:commandButton title="Remover" action="#{bairroBean.excluir}" process="@this" update="listaBairros" icon="ui-icon-close">
+								<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+								<f:setPropertyActionListener target="#{bairroBean.bairro}" value="#{m}"/>
+							</p:commandButton>
+						</p:panelGrid>
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+				
+		</h:form>
+	</ui:define>
+</ui:composition>

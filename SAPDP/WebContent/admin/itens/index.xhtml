@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Itens</h3>
+		<h:form id="form_itens">
+			
+			<p:growl id="msg"/>
+			<p:tabView id="tabView" style="min-height:265px">
+				<p:tab id="tabDadosGerais" title="Dados Gerais">
+					<ui:include src="/admin/itens/dadosBasicos.xhtml"></ui:include>
+				</p:tab>
+				<p:tab id="tabNucleos" title="Núcleos do Item">
+					<ui:include src="/admin/itens/nucleosItens.xhtml"></ui:include>
+				</p:tab>				
+			</p:tabView>
+			<p:commandButton id="save" value="#{itemBean.item.id == null ? 'Salvar' : 'Alterar'}" ajax="false"
+				action="#{itemBean.insert}" process=":form_itens:tabView" update=":form_itens" style="width:100px"/>
+			<p:commandButton value="Criar Nova" action="#{itemBean.criarNovo}" process="@this" update=":form_itens:tabView,:form_itens:save,:form_itens:msg" ajax="false" style="width:100px"/>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaItens" value="#{itemBean.allItens}" var="i" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="10">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{i.id}"/>
+				</p:column>
+				<p:column filterBy="#{i.nome}" sortBy="#{i.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{i.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" action="#{itemBean.carregaNucleos}" process="@this" update=":form_itens:tabView,:form_itens:save" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{itemBean.item}" value="#{i}"/>
+						</p:commandButton>
+					
+						<p:commandButton title="Remover" action="#{itemBean.excluir}" process="@this" update="listaItens,:form_itens:msg" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{itemBean.item}" value="#{i}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

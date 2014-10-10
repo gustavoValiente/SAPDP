@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<glassfish-web-app>
+	<context-root>/SAP</context-root>
+	<security-role-mapping>
+		<role-name>MASTER-ROLE</role-name>
+		<group-name>MASTER</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ADMIN-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>DEFENSOR-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ASSISTENTE-SOCIAL-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+		<group-name>ASSESSOR</group-name>
+	</security-role-mapping>
+	
+	<security-role-mapping>
+		<role-name>ASSISTENTE-SOCIAL-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+		<group-name>ASSESSOR</group-name>
+		<group-name>ASSISTENTE-SOCIAL</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ASSESSOR-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+		<group-name>ASSESSOR</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ATENDENTE-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+		<group-name>ASSESSOR</group-name>
+		<group-name>ATENDENTE</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ESTAGIARIO-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>DEFENSOR</group-name>
+		<group-name>ASSESSOR</group-name>
+		<group-name>ATENDENTE</group-name>
+		<group-name>ESTAGIARIO</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>VISITANTE-ROLE</role-name>
+		<group-name>MASTER</group-name>
+		<group-name>ADMINISTRADOR</group-name>
+		<group-name>VISITANTE</group-name>
+	</security-role-mapping>
+</glassfish-web-app>

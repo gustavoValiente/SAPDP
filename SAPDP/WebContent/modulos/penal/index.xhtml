@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/templates/templateGeral.xhtml">
+	<ui:define name="conteudo">
+		
+		
+		   
+		<table id="tabelaCentral">
+			<tr>
+				<td>
+				 	<ui:include src="form_assis_espera.xhtml"/>
+				</td>
+				<td>
+					<ui:include src="form_registra_atend.xhtml"/>
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					<ui:include src="form_assis_atendidos.xhtml"/>
+				</td>
+				<td>
+					<ui:include src="historico_atendimentos.xhtml"/>					
+				</td>
+			</tr>
+		</table>
+		
+		
+		<h:form id="form_filtroAssis">		
+			<p:growl id="msg" />	
+			<p:dialog id="dialogFiltroAssistido" header="Buscar Assistidos na Base do SIGO - WebService" widgetVar="dialogFiltroAssistido" modal="true" height="500" visible="true"
+				style="width:1000px;">
+				
+					
+				    <p:panel id="panelFiltroAssistido" header="Filtrar Assistido" style="width:1000px;">			    	
+			    		<h:outputText value="Nome"/>
+			    		<p:inputText id="nomeassis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidoSigo.nome}" style="margin-left: 5px;" />
+			    		<h:outputText value="CPF" styleClass="filtroLabel" />
+			    		<p:inputText id="cpfassis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidoSigo.cpf}" style="margin-left: 5px;" />
+			    		<h:outputText value="RG" styleClass="filtroLabel"/>
+			    		<p:inputText id="rgassis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidoSigo.rg}" style="margin-left: 5px;" />
+			    		<h:outputText value="Mâe" styleClass="filtroLabel"/>
+			    		<p:inputText id="maeassis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidoSigo.mae}" style="margin-left: 5px;" />
+			    		<h:outputText value="Pai" styleClass="filtroLabel"/>
+			    		<p:inputText id="paiassis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidoSigo.pai}" style="margin-left: 5px;" />		    		
+			    		<p:commandButton value="Buscar" process=":form_filtroAssis:dialogFiltroAssistido" icon="ui-icon-search" style="margin-left: 15px;" 
+			    			action="#{gerenciaAtendimentoBean.assistidoBean.filtrarWebServiceSIGO}" update=":form_filtroAssis:dtListAssis" />
+				    </p:panel>
+			    		    
+				    <p:dataTable id="dtListAssis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidosSigoLazy}" var="a" 
+						emptyMessage="Nenhum registro encontrado." rows="9" lazy="true" paginator="true" paginatorPosition="bottom" 
+						style="width:1000px; margin-top:15px;">
+						
+						<p:column style="width:40px">
+							<f:facet name="header">
+								<h:outputText value="NOME"/>
+							</f:facet>
+							<h:outputText value="#{a.nome}"/>
+						</p:column>
+						<p:column style="width:10px; text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="CPF"/>
+							</f:facet>
+							<h:outputText value="#{a.cpf}"/>
+						</p:column>
+						<p:column style="width:10px">
+							<f:facet name="header">
+								<h:outputText value="RG"/>
+							</f:facet>
+							<h:outputText value="#{a.rg}"/>
+						</p:column>
+						<p:column style="width:40px">
+							<f:facet name="header">
+								<h:outputText value="MÃE"/>
+							</f:facet>
+							<h:outputText value="#{a.mae}"/>
+						</p:column>
+						<p:column style="width:40px">
+							<f:facet name="header">
+								<h:outputText value="PAI"/>
+							</f:facet>
+							<h:outputText value="#{a.pai}"/>
+						</p:column>
+						<p:column style="width:10px">
+							<f:facet name="header">
+								<h:outputText value="OPERAÇÂO" />
+							</f:facet>
+							<p:panelGrid columns="1" style="text-align:center;">
+								<p:commandButton title="Adicionar Assistido a Lista de Espera" value="Adicionar" action="#{gerenciaAtendimentoBean.assistidoBean.verificaExisteAssistidoBase}" 
+									icon="ui-icon-arrowthickstop-1-e" process="@this" update=":form_filtroAssis:selectAssistidoPreso, :form_filtroAssis:msg">
+									<f:setPropertyActionListener target="#{gerenciaAtendimentoBean.assistidoBean.selecionaAssistidoSigo}" value="#{a}"/>
+																								
+								</p:commandButton>
+							</p:panelGrid>				
+						</p:column>
+					</p:dataTable>				
+			</p:dialog>
+			
+			<p:commandButton style="display:none" actionListener="#{gerenciaAtendimentoBean.assistidoBean.cadastraAssistidoSigoNaBase}"  widgetVar="botaoConfirma" update=":form_filtroAssis:msg">
+				<p:confirm header="Confirmação" message="Deseja cadastrar e adicionar o assistido a lista de espera?" icon="ui-icon-alert"/>
+			</p:commandButton>
+			
+			<p:confirmDialog id="cfmDialog" global="true" showEffect="fade" >				
+		        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="Nâo" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </p:confirmDialog>
+		
+			<p:dialog id="selectAssistidoPreso" widgetVar="selectAssistidoPreso" header="Assistido já existente na Base da Defensoria" style="width:1000px; 
+					background-color: #F5FFFA !important;">				
+		            <p:dataTable var="assis" value="#{gerenciaAtendimentoBean.assistidoBean.assistidosPreso}" style="width:1000px;">
+		                <p:column headerText="ID" style="width:70px;">
+		                    <h:outputText value="#{assis.id}" />
+		                </p:column>
+		 					<p:column headerText="NOME">
+		                    <h:outputText value="#{assis.nome}" />
+		                </p:column>
+		                
+		                <p:column headerText="CPF" style="width:90px;">
+		                    <h:outputText value="#{assis.cpf}" />
+		                </p:column>
+		 
+		                <p:column headerText="RG" style="width:90px;">
+		                    <h:outputText value="#{assis.rg}" />
+		                </p:column>
+		 
+		                <p:column headerText="Mãe" style="width:180px;">
+		                    <h:outputText value="#{assis.mae}" />
+		                </p:column>
+		                
+		                <p:column headerText="Pai" style="width:180px;">
+		                    <h:outputText value="#{assis.pai}" />
+		                </p:column>
+		 
+		                <p:column headerText="Selecione" style="text-align:center; width:43px;">
+		                    <p:commandButton icon="ui-icon-search" action="#{gerenciaAtendimentoBean.assistidoBean.selecionaAssistidoFromDialog}" 
+		                    	process="@this" update=":form_filtroAssis:msg">
+		                    	<f:setPropertyActionListener target="#{gerenciaAtendimentoBean.assistidoBean.selecionadoPreso}" value="#{assis}"/>
+		                    </p:commandButton>
+		                </p:column>
+		            </p:dataTable>		        
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="form_dialogFato">
+			<p:dialog header="Fato Narrado" id="dialogFato" widgetVar="dialogFato" minHeight="400" styleClass="dialog">
+				<p:panelGrid columns="1">					
+					<p:inputTextarea rows="20" autoResize="false" cols="85" value="#{gerenciaAtendimentoBean.atendimentoBean.atendimento.fatoNarrado}" />
+					<p:commandButton value="Salvar"	process=":form_dialogFato:dialogFato" update="dialogFato" style="width:115px"/>
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+		<p:dialog header="Informações Assistido" id="dialogAssistido" widgetVar="dialogAssistido" width="1000" height="480" styleClass="dialog">
+			<h:form id="form_assistido">
+				<p:growl id="msg" />
+				
+				<p:tabView id="tabView" style="min-height:360px">					
+					<p:tab title="Dados Pessoais">
+						<ui:include src="/admin/assistido/dadosPessoais.xhtml"></ui:include>	
+						<p:commandButton value="Alterar Dados" icon="ui-icon-disk"
+								action="#{gerenciaAtendimentoBean.assistidoBean.insert}" process=":form_assistido:tabView" update=":form_assistido,:form_registra:txt_nomeassis,:form_assistido:msg" style="width:120px"/>
+					</p:tab>
+					<p:tab title="Endereços">
+						<ui:include src="/admin/assistido/enderecos.xhtml"></ui:include>
+					</p:tab>								
+				</p:tabView>
+				<p:panelGrid columns="3">
+					<h:outputText value="Data Cadastro:"/>
+					<h:outputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.dataCadastro}">
+						<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"></f:convertDateTime>
+					</h:outputText>
+					<h:outputText value="( #{gerenciaAtendimentoBean.assistidoBean.assistido.usuarioCadastro} )" />				
+					<h:outputText value="Data Alteração:"/> 
+					<h:outputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.dataAlteracao}">
+						<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"></f:convertDateTime>
+					</h:outputText>
+					<h:outputText value="( #{gerenciaAtendimentoBean.assistidoBean.assistido.usuarioAlteracao} )"/>
+				</p:panelGrid>				
+				
+			</h:form>
+		</p:dialog>
+		<!-- Janela de confirmação global -->
+		<ui:include src="/confirmDialog.xhtml"/>
+		<ui:include src="/rodape.xhtml"/>
+						
+	</ui:define>
+</ui:composition>

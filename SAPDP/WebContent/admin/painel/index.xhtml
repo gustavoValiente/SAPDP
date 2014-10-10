@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Painéis da Unidade - #{facesContext.externalContext.requestParameterMap.nomeUnidade}</h3>
+		<h:form id="form_painel">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Painel" id="pnlPainel" >
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{painelBean.painel.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:outputLabel value="Tipo Chamado Senha:"/>
+					<p:selectOneMenu value="#{painelBean.painel.tipoChamadoSenha}">
+						<f:selectItems value="#{painelBean.obterTiposChamadosSenha}"/>								
+					</p:selectOneMenu>
+					<h:outputLabel value="Núcleos:"/>
+					<p:selectCheckboxMenu value="#{painelBean.painel.nucleos}" 
+						label="Núcleos" filter="true" filterText="Filter" filterMatchMode="startsWith" panelStyle="width:220px">  
+						<f:selectItems value="#{nucleoBean.selecionarTodosNomes}" />  
+					</p:selectCheckboxMenu>					
+					<h:panelGroup>
+						<p:commandButton value="#{painelBean.painel.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{painelBean.insert}" process="pnlPainel" update=":form_painel" style="width:100px"/>
+						<p:commandButton value="Criar Novo" action="#{painelBean.criarNovo}" process="@this" update="pnlPainel,:form_painel:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaPainel" value="#{painelBean.obterPaineisPorUnidade}" var="p" emptyMessage="Nenhum registro encontrado." paginator="true" rows="10">
+				<p:column style="width:50px;text-aling:cem">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{p.id}"/>
+				</p:column>
+				<p:column filterBy="#{p.nome}" sortBy="#{p.nome}" style="width:200px">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{p.nome}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="NÚCLEOS"/>
+					</f:facet>
+					<h:outputText value="#{p.nucleos}"/>
+				</p:column>
+				
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" action="#{painelBean.normalizaInformacoes}" process="@this" update=":form_painel:pnlPainel" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{painelBean.painel}" value="#{p}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{painelBean.excluir}" process="@this" update="listaPainel,:form_painel:msg" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{painelBean.painel}" value="#{p}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

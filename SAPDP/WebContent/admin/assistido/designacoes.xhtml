@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+			<p:panelGrid columns="2" >
+				<h:outputText value="Assistido : "/>
+				<h:outputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.nome}"/>
+				
+				<h:outputText value="Caso Novo : "/>				
+				<p:selectOneRadio id="idCasoNovo" value="#{gerenciaAtendimentoBean.designacaoBean.casoNovo}" required="true" 
+					requiredMessage="Caso Novo ou Retorno?"  > 
+					<p:ajax update=":form_assistido:tabView:tabDesignacoes" process="@this" event="change" />
+		            <f:selectItem itemLabel="Sim" itemValue="SIM"  />
+		            <f:selectItem itemLabel="Não" itemValue="NAO" itemDisabled="#{empty gerenciaAtendimentoBean.obterAtendimentosPorAssistido}" />		            			            
+		        </p:selectOneRadio>
+		        
+		        <h:outputText value="Atendimentos : " rendered="#{gerenciaAtendimentoBean.designacaoBean.casoNovo eq 'NAO' and not empty gerenciaAtendimentoBean.atendimentoBean.atendimentos}"/>				
+				<p:selectOneMenu id="listaAtendimentos" value="#{gerenciaAtendimentoBean.atendimentoBean.simpleAtendimento}" scrollHeight="45" 
+					converter="simpleAtendimentoConverter"  required="true" requiredMessage="Tipo Atendimento Obrigatorio!" 
+					filter="true" filterMatchMode="contains" height="300" var="atend" 
+					rendered="#{gerenciaAtendimentoBean.designacaoBean.casoNovo eq 'NAO' and not empty gerenciaAtendimentoBean.atendimentoBean.atendimentos}"
+					style="width:300px;">					
+									
+		            <f:selectItems value="#{gerenciaAtendimentoBean.obterAtendimentosPorAssistido}" var="a" 
+		            	itemLabel="#{a.nomeAtividade} - #{a.nomeProvidencia} - #{a.nomeDefensor} - #{a.nomeUnidade} - #{a.dataAtendimento}" 
+		            	itemValue="#{a}" />
+		            	
+			            	<p:column headerText="Atividade">
+		        	        	<p style="width:200px;"><h:outputText value="#{atend.nomeAtividade}" /></p>
+		        	        </p:column>
+		        	        <p:column headerText="Providência">
+		        	        	<p style="width:200px;"><h:outputText value="#{atend.nomeProvidencia}" /></p>
+		        	        </p:column>
+		        	        <p:column headerText="Defensor">
+		        	        	<p style="width:200px;"><h:outputText value="#{atend.nomeDefensor}" /></p>
+		        	        </p:column>
+		        	        <p:column headerText="Unidade">
+		        	        	<p style="width:200px;"><h:outputText value="#{atend.nomeUnidade}" /></p>
+		        	        </p:column>			
+	        	           <p:column headerText="Data Atendimento">
+		        	        	<h:outputText value="#{atend.dataAtendimento}" >
+		        	        		<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"/>
+		        	        	</h:outputText>
+		        	        </p:column>			           						 
+		        </p:selectOneMenu>
+			    
+				<h:outputText value="Defensor : "/>
+				<p:selectOneListbox id="listaDefensor" value="#{gerenciaAtendimentoBean.designacaoBean.designacao.defensor}" 
+					scrollHeight="100" style="width:500px" required="true" requiredMessage="Defensor Obrigatorio!" var="t" converter="usuarioConverter" filter="true" filterMatchMode="contains">
+		            <f:selectItems value="#{gerenciaAtendimentoBean.usuarioBean.obterDefensoresPorUnidade}" var="d" 
+		            itemLabel="#{d.nome}" itemValue="#{d}" />
+		 
+		            <p:column>
+		                <h:outputText value="#{t.nome}" />		                
+		            </p:column>
+		            <p:column>
+		                <h:outputText value="#{t.loginSubstituicao != null ? '- em substituição (' : ''}"/>
+		                <h:outputText value="#{t.loginSubstituicao != null ? t.nomeDefensorSubstituto : ''}" style="color:red" />
+		                <h:outputText value="#{t.loginSubstituicao != null ? ')' : ''}" />		                
+		            </p:column>
+		            		 
+		        </p:selectOneListbox>
+		        
+		        <h:outputText value="Núcleo : "/>
+				<p:selectOneListbox id="listaNucleo" value="#{gerenciaAtendimentoBean.designacaoBean.designacao.nucleo}" scrollHeight="100" style="width:500px" 
+					required="true" requiredMessage="Nucleo Obrigatorio!" converter="nucleoConverter" filter="true" filterMatchMode="contains">
+		            <f:selectItems value="#{gerenciaAtendimentoBean.nucleoBean.obterListaDeNucleos}" var="n" itemLabel="#{n.nome}" itemValue="#{n}" />
+		 
+		            <p:column>
+		                <h:outputText styleClass="#{n.nome}" />
+		            </p:column>
+		 
+		        </p:selectOneListbox>	
+		        
+		        <h:outputLabel value="Senha:"/>
+				<p:inputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.senha}" size="10"/>
+				
+				
+				<h:outputLabel value="Preferencial:"/>
+				<p:selectOneRadio value="#{gerenciaAtendimentoBean.designacaoBean.designacao.preferencial}" required="true" requiredMessage="Preferencial?"> 
+		            <f:selectItem itemLabel="Sim" itemValue="SIM" />
+		            <f:selectItem itemLabel="Não" itemValue="NAO" />			            
+		        </p:selectOneRadio>	
+		        			
+			</p:panelGrid>
+</ui:composition>

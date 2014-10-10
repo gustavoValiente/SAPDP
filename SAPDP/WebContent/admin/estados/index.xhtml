@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Estados</h3>
+		<h:form id="form_estado">
+		
+			<p:growl id="msg"/>
+		
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Estados" id="painelEstado">
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{estadoBean.estado.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:outputLabel value="Sigla:"/>
+					<p:inputText value="#{estadoBean.estado.sigla}" size="10" maxlength="2"/>
+					<h:outputText/>
+					<h:panelGroup>
+						<p:commandButton value="#{estadoBean.estado.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{estadoBean.insert}" process="painelEstado" update=":form_estado" style="width:100px"/>
+						<p:commandButton value="Criar Novo" action="#{estadoBean.criarNovo}" process="@this" update="painelEstado,:form_estado:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			<p:separator/>
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaEstados" value="#{estadoBean.selecionarTudo}" var="e" emptyMessage="Nenhum registro encontrado." paginator="true">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{e.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="ESTADO"/>
+					</f:facet>
+					<h:outputText value="#{e.nome}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="SIGLA"/>
+					</f:facet>
+					<h:outputText value="#{e.sigla}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form_estado:painelEstado" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{estadoBean.estado}" value="#{e}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{estadoBean.excluir}" process="@this" update="listaEstados" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{estadoBean.estado}" value="#{e}"/>
+						</p:commandButton>
+					</p:panelGrid>
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Defensorias</h3>
+		<h:form id="form_defensorias">
+			
+			<p:growl id="msg"/>
+			<p:tabView id="tabView" style="min-height:265px">
+				<p:tab id="tabDadosGerais" title="Dados Gerais">
+					<ui:include src="/admin/defensorias/dadosBasicos.xhtml"></ui:include>
+				</p:tab>´
+				<p:tab id="tabNucleos" title="Núcleos de Atendimento">
+					<ui:include src="/admin/defensorias/nucleosDefensorias.xhtml"></ui:include>
+				</p:tab>
+			</p:tabView>
+			<p:commandButton id="save" value="#{defensoriaBean.defensoria.id == null ? 'Salvar' : 'Alterar'}" ajax="false"
+				action="#{defensoriaBean.insert}" process=":form_defensorias:tabView" update=":form_defensorias" style="width:100px"/>
+			<p:commandButton value="Criar Nova" action="#{defensoriaBean.criarNova}" process="@this" update=":form_defensorias:tabView,:form_defensorias:save,:form_defensorias:msg" ajax="false" style="width:100px"/>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaDefensoria" value="#{defensoriaBean.allDefensoria}" var="d" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="10">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{d.id}"/>
+				</p:column>
+				<p:column filterBy="#{d.nome}" sortBy="#{d.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{d.nome}"/>
+				</p:column>
+				<p:column  sortBy="#{d.tipo}">
+					<f:facet name="header">
+						<h:outputText value="TIPO DEFENSORIA"/>
+					</f:facet>
+					<h:outputText value="#{d.tipo}"/>
+				</p:column>
+				<p:column sortBy="#{d.municipioDistrito.nome}" filterBy="#{d.municipioDistrito.nome}">
+					<f:facet name="header">
+						<h:outputText value="MUNICIPIO / DISTRITO"/>
+					</f:facet>
+					<h:outputText value="#{d.municipioDistrito.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" action="#{defensoriaBean.normalizarInformacoes}" process="@this" update=":form_defensorias:tabView,:form_defensorias:save" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{defensoriaBean.defensoria}" value="#{d}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{defensoriaBean.excluir}" process="@this" update="listaDefensoria,:form_defensorias:msg" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{defensoriaBean.defensoria}" value="#{d}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

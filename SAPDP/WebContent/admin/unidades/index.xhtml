@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Unidades</h3>
+		<h:form id="form_unidades">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Unidades" id="painelUnidades" >
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{unidadeBean.unidade.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:outputLabel value="Descrição:"/>
+					<p:inputTextarea value="#{unidadeBean.unidade.descricao}" cols="50" rows="5"/>
+					<h:outputLabel value="Município da Unidade:"/>
+			         <p:autoComplete id="event" value="#{unidadeBean.municipioDistritoBean.municipioD.nome}" required="true" requiredMessage="Municipio Obrigatório!"
+			        	completeMethod="#{unidadeBean.municipioDistritoBean.filtrarMunicipiosDistritos}" size="50">
+			            <p:ajax event="itemSelect" listener="#{unidadeBean.municipioDistritoBean.onItemSelect}" update=":form_unidades:msg" />
+			        </p:autoComplete>
+					<h:outputText/>
+					<h:panelGroup>
+						<p:commandButton value="#{unidadeBean.unidade.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{unidadeBean.insert}" process="painelUnidades" update=":form_unidades" style="width:100px"/>
+						<p:commandButton value="Criar Nova" action="#{unidadeBean.criarNova}" process="@this" update="painelUnidades,:form_unidades:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaUnidades" value="#{unidadeBean.allUnidade}" var="u" emptyMessage="Nenhum registro encontrado." paginator="true" lazy="true" rows="10">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{u.id}"/>
+				</p:column>
+				<p:column filterBy="#{u.nome}" sortBy="#{u.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{u.nome}"/>
+				</p:column>
+				<p:column sortBy="#{u.municipioDistrito.nome}" filterBy="#{u.municipioDistrito.nome}">
+					<f:facet name="header">
+						<h:outputText value="MUNICIPIO / DISTRITO"/>
+					</f:facet>
+					<h:outputText value="#{u.municipioDistrito.nome}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="3" style="text-align:center">
+						<p:commandButton title="Visualizar" action="#{unidadeBean.selecionarNomeDoMunicipio}" process="@this" update=":form_unidades:painelUnidades" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{unidadeBean.unidade}" value="#{u}"/>
+						</p:commandButton>
+						<p:button outcome="/admin/painel/index" title="Painéis"  icon="ui-icon-contact" >
+							<f:param name="codUnidade" value="#{u.id}"></f:param>
+							<f:param name="nomeUnidade" value="#{u.nome}"></f:param>					  
+						</p:button>
+						<p:commandButton title="Remover" action="#{unidadeBean.excluir}" process="@this" update="listaUnidades,:form_unidades:msg" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{unidadeBean.unidade}" value="#{u}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<!-- Painel -->
+		<p:panel  id="painelNucleos" >
+			<h:outputLabel value="Núcleos: "/>				        
+	        <p:autoComplete id="event2" value="#{itemBean.nucleoBean.nucleo.nome}" maxResults="8" placeholder="Vincule núcleos ao item..."
+	        	completeMethod="#{itemBean.nucleoBean.filtrarNucleosPorNome}" size="50">
+	            <p:ajax event="itemSelect" listener="#{nucleoBean.onItemSelect}" process="@this" update=":form_itens:msg"/>
+	        </p:autoComplete>
+	        <p:commandButton value="Adicionar" ajax="false" action="#{itemBean.adicionarNucleo}" icon="ui-icon-plusthick"/>
+	        <p:dataGrid columns="4" paginator="true"  paginatorPosition="top" rows="12" id="listaNucleos" value="#{itemBean.item.nucleos}" var="n" emptyMessage="Nenhum núcleo vinculado...">
+	        	<p:column sortBy="#{n.nome}" >
+	        		<f:facet name="header">
+	        			<h:outputText value="NOME"/>
+	        		</f:facet>
+	        		<h:outputText value="#{n.nome}"/> 
+	        		<p:commandButton action="#{itemBean.removerNucleo}" icon="ui-icon-close" ajax="false">
+	        			<f:setPropertyActionListener target="#{itemBean.nucleoBean.nucleo}" value="#{n}"/>
+	        		</p:commandButton>
+	        	</p:column>
+	        </p:dataGrid>
+		</p:panel>
+</ui:composition>

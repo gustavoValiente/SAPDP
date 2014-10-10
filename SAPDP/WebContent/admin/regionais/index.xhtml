@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/admin/index.xhtml">
+	<ui:define name="conteudoGerenciador">
+		<h3>Gerência de Regionais</h3>
+		<h:form id="form_regional">
+			
+			<p:growl id="msg"/>
+			
+			<!-- Painel -->
+			<p:panel header="Inserir/Alterar Regionais" id="painelRegional" >
+				<p:panelGrid columns="2" >
+					<h:outputLabel value="Nome:"/>
+					<p:inputText value="#{regionalBean.regional.nome}" required="true" requiredMessage="Informe o nome" size="50"/>
+					<h:outputLabel value="Nome Coordenador:"/>
+					<p:inputText value="#{regionalBean.regional.nomeCoordenador}" size="50"/>
+					<h:outputText/>
+					<h:panelGroup>
+						<p:commandButton value="#{regionalBean.regional.id == null ? 'Salvar' : 'Alterar'}" 
+							action="#{regionalBean.insert}" process="painelRegional" update=":form_regional" style="width:100px"/>
+						<p:commandButton value="Criar Nova" action="#{regionalBean.criarNova}" process="@this" update="painelRegional,:form_regional:msg" style="width:100px"/>
+					</h:panelGroup>
+				</p:panelGrid>
+			</p:panel>
+			
+			<p:separator/>
+			
+			<!-- Datatable, utiliza LAZY quando a qtde de registro for muito grande -->
+			<p:dataTable id="listaRegionais" value="#{regionalBean.selecionarTudo}" var="r" emptyMessage="Nenhum registro encontrado." paginator="true">
+				<p:column style="width:50px">
+					<f:facet name="header">
+						<h:outputText value="ID"/>
+					</f:facet>
+					<h:outputText value="#{r.id}"/>
+				</p:column>
+				<p:column sortBy="#{r.nome}">
+					<f:facet name="header">
+						<h:outputText value="NOME"/>
+					</f:facet>
+					<h:outputText value="#{r.nome}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="NOME COORDENADOR"/>
+					</f:facet>
+					<h:outputText value="#{r.nomeCoordenador}"/>
+				</p:column>
+				<p:column style="width:150px">
+					<f:facet name="header">
+						<h:outputText value="OPERAÇÕES"/>
+					</f:facet>
+					<p:panelGrid columns="2" style="text-align:center">
+						<p:commandButton title="Visualizar" process="@this" update=":form_regional:painelRegional" icon="ui-icon-search" >
+							<f:setPropertyActionListener target="#{regionalBean.regional}" value="#{r}"/>
+						</p:commandButton>
+						<p:commandButton title="Remover" action="#{regionalBean.excluir}" process="@this" update="listaRegionais" icon="ui-icon-close">
+							<p:confirm header="Confirmação" message="Deseja mesmo excluir este registro?" icon="ui-icon-alert" />	
+							<f:setPropertyActionListener target="#{regionalBean.regional}" value="#{r}"/>
+						</p:commandButton>
+					</p:panelGrid>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

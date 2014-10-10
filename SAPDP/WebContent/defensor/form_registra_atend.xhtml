@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			
+	 	<h:form id="form_registra">
+	 		<p:growl id="msg" />
+	 		
+			<p:panel id="panelRegistra" header="Registrar Atendimento"  closable="true" toggleSpeed="500" closeSpeed="500" styleClass="pnlInicial">
+				<p:panelGrid id="pGridAtender" style="width:100%">
+				
+					<p:row>
+				        <p:column styleClass="tam_coluna">
+				        	<h:outputLabel value="Assistido:"/>
+				       	</p:column>
+				        <p:column style="width:auto !important;">
+					        <p:inputText id="txt_nomeassis" value="#{gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" readonly="true"
+					        	disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" size="47" />
+				        </p:column>
+				        <p:column>
+				        	<p:commandButton value="Info Assis" icon="ui-icon-person" 
+				        		actionListener="#{gerenciaAtendimentoBean.obterInformacoesDoAssistido}" oncomplete="PF('dialogAssistido').show();" 
+					        	style="width:115px" process="@this" update=":form_assistido"
+					        	disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}">							        		
+				        	</p:commandButton>											
+				        </p:column>										
+					</p:row>
+					<p:row>
+						<p:column styleClass="tam_coluna">
+							<h:outputLabel value="Senha:"/>
+						</p:column>
+				        <p:column>
+							<p:inputText value="#{gerenciaAtendimentoBean.designacaoBean.designacao.senha}" readonly="true" size="8" />
+							<h:outputLabel value="Juizado:" style="margin-left:10px;"/>
+        					<p:selectBooleanCheckbox value="#{gerenciaAtendimentoBean.atendimentoBean.juizado}"
+        						disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" 
+        						style="margin-left:10px; vertical-align: middle;" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="Gerar DOC" action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-print" 
+								process="panelRegistra" update=":form_registra, :form_espera, :form_atendidos:panelAtendidos"  
+								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" />
+						</p:column>
+					</p:row>
+					<p:row>
+				        <p:column styleClass="tam_coluna">
+				        	<h:outputText value="Núcleo : "/>
+				       	</p:column>
+				        <p:column>	
+					        <p:selectOneMenu id="listaNucleo" value="#{gerenciaAtendimentoBean.designacaoBean.designacao.nucleo}" 
+					        disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.nucleo}"  scrollHeight="45" style="width:300px" 
+							required="true" requiredMessage="Nucleo Obrigatorio!" converter="nucleoConverter" filter="true" filterMatchMode="contains" height="100">
+								<p:ajax listener="#{gerenciaAtendimentoBean.refreshItens}"  
+									event="change"   
+									update="listaItens"  
+									process="listaNucleo" />
+					            <f:selectItems value="#{gerenciaAtendimentoBean.nucleoBean.obterListaDeNucleos}" var="n" itemLabel="#{n.nome}" itemValue="#{n}" />
+					                <h:outputText value="#{n.nome}" />						           						 
+					        </p:selectOneMenu>												
+						</p:column>	
+						<p:column>
+				        	<p:commandButton value="Fato Narrado" icon="ui-icon-document" type="button" onclick="PF('dialogFato').show();" 
+				        	style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>											
+				        </p:column>	
+					</p:row>
+					<p:row>									
+				        <p:column styleClass="tam_coluna">
+			        			 <h:outputText value="Atividade : "/>
+			        	</p:column>
+			        	<p:column>
+			        		<p:selectOneMenu id="listaItens" value="#{gerenciaAtendimentoBean.itemBean.item}" disabled="#{empty gerenciaAtendimentoBean.itemBean.itens}" scrollHeight="45" style="width:300px" 
+								required="true" requiredMessage="Atividade Obrigatoria!" converter="itemConverter" filter="true" filterMatchMode="contains" height="100">
+								<p:ajax listener="#{gerenciaAtendimentoBean.refreshSubItens}"  
+									event="change"   
+									update="listaSubItens"  
+									process="listaItens" />
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true"/>
+					            <f:selectItems value="#{gerenciaAtendimentoBean.itemBean.itens}" var="i" itemLabel="#{i.nome}" itemValue="#{i}" />
+				        	        <h:outputText value="#{i.nome}" />						           						 
+					        </p:selectOneMenu>	
+			        	</p:column>	
+						<p:column>
+							<p:commandButton value="#{(gerenciaAtendimentoBean.atendimentoBean.simpleAtendimento.idAtendimento == null and 
+								gerenciaAtendimentoBean.atendimentoBean.atendimento.id == null) ? 'Registrar':'Editar'}" 
+								action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-disk" process="panelRegistra" 
+								update=":form_registra, :form_espera:listaAssistidoEspera, :form_atendidos:panelAtendidos, :historico_atendidos:panelHistAssis"  
+								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>
+						</p:column>	 
+			       </p:row>
+			       <p:row>
+			        	<p:column styleClass="tam_coluna">
+							<h:outputText value="Providência : "/>
+						</p:column>
+						<p:column>
+					        <p:selectOneMenu id="listaSubItens" value="#{gerenciaAtendimentoBean.subItemBean.subitem}" disabled="#{empty gerenciaAtendimentoBean.subItemBean.subitens}" scrollHeight="45" style="width:300px" 
+								required="true" requiredMessage="Providência Obrigatoria!" converter="subItemConverter" filter="true" filterMatchMode="contains" height="100">
+								<f:selectItem itemLabel="Selecione..." noSelectionOption="true"/>
+					            <f:selectItems value="#{gerenciaAtendimentoBean.subItemBean.subitens}" var="i" itemLabel="#{i.nome}" itemValue="#{i}" />
+				        	        <h:outputText value="#{i.nome}" />						           						 
+					        </p:selectOneMenu>
+					    </p:column>
+				   </p:row>
+			       <p:row>		
+			       		<p:column styleClass="tam_coluna">										
+							<h:outputLabel value="Obs. / Pendências :"/>
+						</p:column>
+						<p:column>
+							<p:inputTextarea rows="3" autoResize="false" cols="46" value="#{gerenciaAtendimentoBean.atendimentoBean.atendimento.observacao}" />											
+						</p:column>						
+			       </p:row>
+				</p:panelGrid>
+					
+			</p:panel>
+		</h:form>
+</ui:composition>

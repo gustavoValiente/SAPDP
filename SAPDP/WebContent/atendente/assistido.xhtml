@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" template="/atendente/index.xhtml">	
+	
+	<ui:define name="conteudoAtendente">
+
+		<h3 >#{request.getParameter('codAssistido') != null ? 'Editar ': 'Cadastrar '} Assistido #{gerenciaAtendimentoBean.assistidoBean.assistido.nome}</h3>
+		
+		<ui:include src="/admin/assistido/form_assistido.xhtml"/>
+		
+		<p:button icon="ui-icon-arrowreturnthick-1-w" outcome="/atendente/tabela_assistidos" style="text-align:right; font-size:12px !important;" value="Voltar"></p:button>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+	</ui:define>
+</ui:composition>

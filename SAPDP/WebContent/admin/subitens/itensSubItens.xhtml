@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<!-- Painel -->
+		<p:panel  id="painelItens" >
+			<h:outputLabel value="Itens: "/>				        
+	        <p:autoComplete id="event2" value="#{subItemBean.itemBean.item.nome}" maxResults="8" placeholder="Vincule itens ao subItem..."
+	        	completeMethod="#{subItemBean.itemBean.filtrarItensPorNome}" size="50">
+	            <p:ajax event="itemSelect" listener="#{itemBean.onItemSelect}" process="@this" update=":form_subitens:msg"/>
+	        </p:autoComplete>
+	        <p:commandButton value="Adicionar" ajax="false" action="#{subItemBean.adicionarItem}" icon="ui-icon-plusthick"/>
+	        <p:dataGrid columns="4" paginator="true"  paginatorPosition="top" rows="12" id="listaItens" value="#{subItemBean.subitem.itens}" var="n" emptyMessage="Nenhum item vinculado...">
+	        	<p:column sortBy="#{n.nome}" >
+	        		<f:facet name="header">
+	        			<h:outputText value="NOME"/>
+	        		</f:facet>
+	        		<h:outputText value="#{n.nome}"/> 
+	        		<p:commandButton action="#{subItemBean.removerItem}" icon="ui-icon-close" ajax="false">
+	        			<f:setPropertyActionListener target="#{subItemBean.itemBean.item}" value="#{n}"/>
+	        		</p:commandButton>
+	        	</p:column>
+	        </p:dataGrid>
+		</p:panel>
+</ui:composition>

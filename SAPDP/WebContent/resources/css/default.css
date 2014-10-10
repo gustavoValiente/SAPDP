@@ -1,0 +1,45 @@
+/*#############################################################
+
+#############################################################*/
+
+html, body{
+	padding:0;
+	margin:0;
+}
+.ui-widget,
+.ui-widget .ui-widget
+{
+    font-size: 85% !important;
+	font-family:'Trebuchet MS', Tahoma, Verdana, Sans-serif;
+}
+.ui-widget-content{font-size:13px;font-family:'Trebuchet MS', Tahoma, Verdana, Sans-serif;color: #000}
+
+.ui-state-default{font-size:11px;font-family:'Trebuchet MS', Tahoma, Verdana, Sans-serif;}
+
+.ui-panelgrid tr, .ui-panelgrid td{
+  border:none !important;
+}
+.ui-wizard-step-title{
+	font-size:12px !important;
+}
+.ui-wizard-navbar{	
+	margin:auto;
+}
+.ui-wizard-navbar button{
+	margin: 10px 15px;
+	color:Blue;
+}
+.ui-datatable-odd{background:#fafafa;}
+.ui-datatable-even{background:#f2f2f2;}
+.ui-datatable-odd:hover{background:#c7e2fC;}
+.ui-datatable-even:hover{background:#c7e2fC;}
+.ui-datatable-data .ui-widget-content{
+	font-size:12px !important;
+}
+
+.ui-widget-header{
+	font-size: 12px !important;
+}
+.ui-dialog-titlebar{
+	font-size: 12px !important;
+} 

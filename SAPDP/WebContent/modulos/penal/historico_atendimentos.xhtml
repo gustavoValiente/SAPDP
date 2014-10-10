@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			
+	 	<h:form id="historico_atendidos">
+						
+			<p:panel id="panelHistAssis" header="Histórico do Assistido"  closable="true" toggleSpeed="500" closeSpeed="500" styleClass="pnlInicial">
+				<p:dataTable id="tbAtendidos" value="#{gerenciaAtendimentoBean.atendimentoBean.atendimentos2}" var="a"
+				 	emptyMessage="Nenhum registro encontrado." paginator="true" paginatorPosition="bottom" 
+				 	disabled="#{empty gerenciaAtendimentoBean.atendimentoBean.simpleAtendimentosLazy}"
+				 	selectionMode="single" selection="#{gerenciaAtendimentoBean.atendimentoBean.atendimento}" rowKey="#{a.id}">
+				 	
+				 	<p:ajax event="rowSelect" listener="#{gerenciaAtendimentoBean.carregaAtendimento2}" process="@this" 
+						update=":form_dialogFato:dialogFato,:form_registra:pGridAtender" />
+				 	
+					<p:column style="width:40px">
+						<f:facet name="header">
+							<h:outputText value="ID"/>
+						</f:facet>
+						<h:outputText value="#{a.id}"/>
+					</p:column>
+					<p:column style="width:130px;">
+						<f:facet name="header">
+							<h:outputText value="ASSISTIDO"/>
+						</f:facet>
+						<h:outputText value="#{a.designacao.assistido.nome}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="DEFENSOR"/>
+						</f:facet>
+						<h:outputText value="#{a.designacao.defensor.nome}"/>
+					</p:column>
+					<p:column style="width:110px;">
+						<f:facet name="header">
+							<h:outputText value="ATIVIDADE"/>
+						</f:facet>
+						<h:outputText value="#{a.item.nome}"/>
+					</p:column>
+					<p:column style="width:110px;">
+						<f:facet name="header">
+							<h:outputText value="PROVIDÊNCIA"/>
+						</f:facet>
+						<h:outputText value="#{a.subItem.nome}"/>
+					</p:column>
+					<p:column style="width:114px;">
+						<f:facet name="header">						
+							<h:outputText value="Data Atendimento"/>							
+						</f:facet>
+						<h:outputText value="#{a.dataAtendimento}" >
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-4"/>
+						</h:outputText>
+					</p:column>											
+				</p:dataTable>
+			</p:panel>
+			
+		</h:form>	
+</ui:composition>
