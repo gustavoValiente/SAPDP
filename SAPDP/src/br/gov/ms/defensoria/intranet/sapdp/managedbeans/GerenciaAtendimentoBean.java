@@ -140,7 +140,7 @@ public class GerenciaAtendimentoBean {
 		
 			this.atendimentoBean.setSimpleAtendimento(new SimpleAtendimento());
 			System.out.println("ATENDENDO "+this.designacaoBean.getSimpleDesignacao().getIdDesignacao());
-			this.designacaoBean.setDesignacao(this.designacaoBean.obterDesignacaoPorId());
+			this.designacaoBean.setDesignacao(this.designacaoBean.obterDesignacaoPorId());			
 			this.itemBean.setItens(this.getObterListaDeItensPorNucleo());
 			this.subItemBean.setSubitens(this.getObterListaDeSubItensPorItem());
 			this.atendimentoBean.criarNovo();
@@ -264,8 +264,12 @@ public class GerenciaAtendimentoBean {
 	 * @return List<ItemAtendimento>
 	 */
 	public List<ItemAtendimento> getObterListaDeItensPorNucleo(){
-		System.out.println("ID NUCLEOOOOOOOOOOOOOOOOOOOOOO >>>>>>>"+this.designacaoBean.getDesignacao().getNucleo().getId());
-		return this.itemBean.obterListaDeItensPorNucleo(this.designacaoBean.getDesignacao().getNucleo().getId());
+		if(this.designacaoBean.getDesignacao().getNucleo() != null){
+			System.out.println("ID NUCLEOOOOOOOOOOOOOOOOOOOOOO >>>>>>>"+this.designacaoBean.getDesignacao().getNucleo().getId());
+			return this.itemBean.obterListaDeItensPorNucleo(this.designacaoBean.getDesignacao().getNucleo().getId());
+		}else{
+			return this.itemBean.getItens();
+		}
 	}
 	
 	/**
@@ -283,8 +287,12 @@ public class GerenciaAtendimentoBean {
 	 * @return List<SubItemAtendimento>
 	 */
 	public List<SubItemAtendimento> getObterListaDeSubItensPorItem(){
-		System.out.println("ID ITEM >>>>>>>"+this.itemBean.getItem().getId());
-		return this.subItemBean.obterListaDeSubItensPorItem(this.itemBean.getItem().getId());
+		if(this.itemBean.getItem() != null){
+			System.out.println("ID ITEM >>>>>>>"+this.itemBean.getItem().getId());
+			return this.subItemBean.obterListaDeSubItensPorItem(this.itemBean.getItem().getId());
+		}else{
+			return this.subItemBean.getSubitens();
+		}
 	}
 	
 	

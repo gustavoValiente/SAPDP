@@ -99,7 +99,7 @@
 					</p:dataTable>				
 			</p:dialog>
 			
-			<p:commandButton style="display:none" actionListener="#{gerenciaAtendimentoBean.assistidoBean.cadastraAssistidoSigoNaBase}"  widgetVar="botaoConfirma" update=":form_filtroAssis:msg">
+			<p:commandButton style="display:none" actionListener="#{gerenciaAtendimentoBean.cadastraAssistidoSigoNaBase}"  widgetVar="botaoConfirma" update=":form_filtroAssis:msg">
 				<p:confirm header="Confirmação" message="Deseja cadastrar e adicionar o assistido a lista de espera?" icon="ui-icon-alert"/>
 			</p:commandButton>
 			
@@ -135,7 +135,7 @@
 		                </p:column>
 		 
 		                <p:column headerText="Selecione" style="text-align:center; width:43px;">
-		                    <p:commandButton icon="ui-icon-search" action="#{gerenciaAtendimentoBean.assistidoBean.selecionaAssistidoFromDialog}" 
+		                    <p:commandButton icon="ui-icon-search" action="#{gerenciaAtendimentoBean.selecionaAssistidoFromDialog}" 
 		                    	process="@this" update=":form_filtroAssis:msg">
 		                    	<f:setPropertyActionListener target="#{gerenciaAtendimentoBean.assistidoBean.selecionadoPreso}" value="#{assis}"/>
 		                    </p:commandButton>

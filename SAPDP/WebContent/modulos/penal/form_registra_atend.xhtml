@@ -50,8 +50,8 @@
 				       	</p:column>
 				        <p:column>	
 					        <p:selectOneMenu id="listaNucleo" value="#{gerenciaAtendimentoBean.designacaoBean.designacao.nucleo}" 
-					        disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.nucleo}"  scrollHeight="45" style="width:300px" 
-							required="true" requiredMessage="Nucleo Obrigatorio!" converter="nucleoConverter" filter="true" filterMatchMode="contains" height="100">
+					        scrollHeight="45" style="width:300px" required="true" requiredMessage="Nucleo Obrigatorio!" converter="nucleoConverter" 
+					        filter="true" filterMatchMode="contains" height="100" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}">
 								<p:ajax listener="#{gerenciaAtendimentoBean.refreshItens}"  
 									event="change"   
 									update="listaItens"  
