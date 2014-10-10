@@ -17,4 +17,6 @@ import javax.inject.Qualifier;
 @Target({ ElementType.FIELD, ElementType.METHOD })
 public @interface DAO {
 
+	
+	
 }
