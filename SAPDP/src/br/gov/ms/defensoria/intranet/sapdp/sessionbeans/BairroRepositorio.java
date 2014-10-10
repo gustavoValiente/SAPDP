@@ -85,6 +85,7 @@ public class BairroRepositorio extends
 		if(!nome.isEmpty())
 			jpql += " AND m.nome LIKE :nome";
 		if(!municipio.isEmpty())
+			
 			jpql += " AND m.municipio.nome LIKE :municipio";		
 		if(idMunicipio != null)
 			jpql += " AND m.municipio.id = :idMunicipio";

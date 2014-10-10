@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.gov.ms.defensoria.intranet.sapdp.generics.IGenericEntity;
+
 /**
  * 
  * @author Equipe de desenvolvimento DPGE-MS.
@@ -19,7 +21,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TB_BAIRRO")
-public class Bairro {
+public class Bairro implements IGenericEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

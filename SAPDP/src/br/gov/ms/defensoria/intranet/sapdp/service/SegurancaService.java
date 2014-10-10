@@ -92,14 +92,14 @@ public class SegurancaService {
 	
 	public List<IGenericEntity> carregarPesquisaLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros, IGenericEntity entity) {
+			Map<String, Object> parametros, IGenericEntity entity) {
 		return searchBO.carregarPesquisaLazy(startingAt, maxPerPage,
 				fieldOrder, order, parametros, entity);
 	}
 
 	public List<IGenericEntity> carregarPesquisaUsuarioLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
-			Map<String, String> parametros) {
+			Map<String, Object> parametros) {
 		return searchBO.carregarPesquisaUsuarioLazy(startingAt, maxPerPage,
 				fieldOrder, order, parametros);
 	}
@@ -193,8 +193,8 @@ public class SegurancaService {
 		designacaoBO.alterarStatusDesignacoes(id, status);
 	}
 	
-	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(String defensor) throws ParseException{
-		return designacaoBO.filtrarDesignacoesPorDefensorData(defensor);
+	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(String defensor, String tipoDesignacao) throws ParseException{
+		return designacaoBO.filtrarDesignacoesPorDefensorData(defensor, tipoDesignacao);
 	}
 
 	public Designacoes designarAssistidoSigo(Assistido assistido, Usuario usuario){
