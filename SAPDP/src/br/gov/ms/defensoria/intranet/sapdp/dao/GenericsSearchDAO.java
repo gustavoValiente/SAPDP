@@ -39,18 +39,16 @@ public class GenericsSearchDAO {
 			String campo = parametro.next();
 			String args = "args_" + indice;
 			Object valueArgs = parametros.get(campo);
-			if(valueArgs.getClass().equals(String.class)){
+			if (valueArgs.getClass().equals(String.class)) {
 				jpql += " AND entity." + campo + " LIKE :" + args;
 			} else {
 				jpql += " AND entity." + campo + " = :" + args;
 			}
-			
+
 			indice++;
 		}
 
-		// Ordenacao
-		if (!fieldOrder.isEmpty())
-			jpql += " ORDER BY " + fieldOrder + " " + order;
+		jpql = orderParametroHQL(fieldOrder, order, jpql);
 
 		Query q = dao.getEntityManager().createQuery(jpql);
 
@@ -63,12 +61,12 @@ public class GenericsSearchDAO {
 			String campo = parametro.next();
 			String args = "args_" + indice;
 			Object valueArgs = parametros.get(campo);
-			if(valueArgs.getClass().equals(String.class)){
+			if (valueArgs.getClass().equals(String.class)) {
 				q.setParameter(args, "%" + valueArgs.toString() + "%");
-			} else{
+			} else {
 				q.setParameter(args, valueArgs);
 			}
-			
+
 		}
 
 		List<IGenericEntity> entities = q.getResultList();
@@ -83,32 +81,22 @@ public class GenericsSearchDAO {
 	public List<IGenericEntity> carregarPesquisaUsuarioLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
 			Map<String, Object> parametros) {
-		
 
 		String jpql = "SELECT entity FROM Usuario entity where entity.login <> 'master' ";
 
 		// Filtros
 		Set<String> listParametros = parametros.keySet();
-		for (Iterator<String> parametro = listParametros.iterator(); parametro
-				.hasNext();) {
-			String campo = parametro.next();
-			jpql += " AND entity." + campo + " LIKE :" + campo;
-		}
+		jpql = setarParametroHQL(jpql, listParametros);
 
 		// Ordenacao
-		if (!fieldOrder.isEmpty())
-			jpql += " ORDER BY " + fieldOrder + " " + order;
+		jpql = orderParametroHQL(fieldOrder, order, jpql);
 
 		Query q = dao.getEntityManager().createQuery(jpql);
 
 		q.setFirstResult(startingAt);
 		q.setMaxResults(maxPerPage);
 
-		for (Iterator<String> parametro = listParametros.iterator(); parametro
-				.hasNext();) {
-			String campo = parametro.next();
-			q.setParameter(campo, "%" + parametros.get(campo) + "%");
-		}
+		iterarArgumentoHQL(parametros, listParametros, q);
 
 		List<IGenericEntity> entities = q.getResultList();
 		if (SimpleValidate.isNullOrEmpty(entities)) {
@@ -116,6 +104,32 @@ public class GenericsSearchDAO {
 		}
 		return entities;
 
+	}
+
+	private static void iterarArgumentoHQL(Map<String, Object> parametros,
+			Set<String> listParametros, Query q) {
+		for (Iterator<String> parametro = listParametros.iterator(); parametro
+				.hasNext();) {
+			String campo = parametro.next();
+			q.setParameter(campo, "%" + parametros.get(campo) + "%");
+		}
+	}
+
+	private static String orderParametroHQL(String fieldOrder, String order,
+			String jpql) {
+		if (!fieldOrder.isEmpty())
+			jpql += " ORDER BY " + fieldOrder + " " + order;
+		return jpql;
+	}
+
+	private static String setarParametroHQL(String jpql,
+			Set<String> listParametros) {
+		for (Iterator<String> parametro = listParametros.iterator(); parametro
+				.hasNext();) {
+			String campo = parametro.next();
+			jpql += " AND entity." + campo + " LIKE :" + campo;
+		}
+		return jpql;
 	}
 
 }

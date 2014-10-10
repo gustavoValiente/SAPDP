@@ -41,7 +41,7 @@ public class Usuario implements IGenericEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(nullable = false, unique = true)
 	private String login;

@@ -96,17 +96,20 @@ public class DesignacaoBean {
 	 * 
 	 * @return <code>List<Desiginacoes></code>
 	 */
-	public List<SimpleDesignacao> getfiltrarDesignacoesPorDefensorData(String tipoDesignacao) {
+	public List<SimpleDesignacao> getfiltrarDesignacoesPorDefensorData(
+			String tipoDesignacao) {
 		try {
 			this.usuario = this.usuarioServiceBean.obterUsuarioDaSessao();
-			// Se assessor ou estagi�rio logado, ent�o pega o defensor vinculado
+			// Se assessor ou estagi�rio logado, ent�o pega o defensor
+			// vinculado
 			if (this.usuario.getGrupo().get(0) == Grupo.ASSESSOR
 					|| this.usuario.getGrupo().get(0) == Grupo.ESTAGIARIO) {
 				this.usuario = this.usuarioServiceBean
 						.obterDefensorDoAssessor(this.usuario.getLogin());
 			}
 			this.simpleDesignacoes = this.service
-					.filtrarDesignacoesPorDefensorData(this.usuario.getLogin(), tipoDesignacao);
+					.filtrarDesignacoesPorDefensorData(this.usuario.getLogin(),
+							tipoDesignacao);
 			return this.simpleDesignacoes;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -118,20 +121,23 @@ public class DesignacaoBean {
 	public void buscaDesignacoesPorDefensorData(String tipoDesignacao) {
 		try {
 			this.usuario = this.usuarioServiceBean.obterUsuarioDaSessao();
-			// Se assessor ou estagi�rio logado, ent�o pega o defensor vinculado
+			// Se assessor ou estagi�rio logado, ent�o pega o defensor
+			// vinculado
 			if (this.usuario.getGrupo().get(0) == Grupo.ASSESSOR
 					|| this.usuario.getGrupo().get(0) == Grupo.ESTAGIARIO) {
 				this.usuario = this.usuarioServiceBean
 						.obterDefensorDoAssessor(this.usuario.getLogin());
 			}
-			if(tipoDesignacao.equals("PADRAO")){
+			if (tipoDesignacao.equals("PADRAO")) {
 				this.simpleDesignacoes = this.service
-						.filtrarDesignacoesPorDefensorData(this.usuario.getLogin(), tipoDesignacao);	
-			}else if(tipoDesignacao.equals("PENAL")){ 
+						.filtrarDesignacoesPorDefensorData(
+								this.usuario.getLogin(), tipoDesignacao);
+			} else if (tipoDesignacao.equals("PENAL")) {
 				this.simpleDesignacoes = this.service
-						.filtrarDesignacoesPorDefensorDataPenal(this.usuario.getLogin(), tipoDesignacao);	
+						.filtrarDesignacoesPorDefensorDataPenal(
+								this.usuario.getLogin(), tipoDesignacao);
 			}
-			
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -26,6 +26,7 @@ import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.DadosAssessoria;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Grupo;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Substituicao;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Usuario;
+import br.gov.ms.defensoria.intranet.sapdp.service.SegurancaService;
 import br.gov.ms.defensoria.intranet.sapdp.sessionbeans.UsuarioRepositorio;
 
 /**
@@ -41,16 +42,15 @@ public class UsuarioBean {
 	// Objetos manipuladores e representantes da classe
 	// br.gov.ms.defensoria.intranet.sapdp.model.Usuario
 	@EJB
-	private UsuarioRepositorio uRep;
+	private SegurancaService service;
 	private Usuario usuario = new Usuario();
 	private Substituicao usuarioSubstituicao = new Substituicao();
 	private Substituicao usuarioSubstituicao2 = new Substituicao();
-	private List<Usuario> usuarios = new ArrayList<Usuario>();	
+	private List<Usuario> usuarios = new ArrayList<Usuario>();
 	private List<Substituicao> usuariosSubstituicao = new ArrayList<Substituicao>();
 	private Usuario usuarioAssessoria = new Usuario();
 	private DadosAssessoria dadosAssessoria = new DadosAssessoria();
-		
-	
+
 	@ManagedProperty(value = "#{municipioDistritoBean}")
 	private MunicipioDistritoBean municipioDistritoBean;
 
@@ -59,7 +59,7 @@ public class UsuarioBean {
 
 	@ManagedProperty(value = "#{usuarioServiceBean}")
 	private UsuarioServiceBean usuarioServiceBean;
-	
+
 	@ManagedProperty(value = "#{defensoriaBean}")
 	private DefensoriaBean defensoriaBean;
 
@@ -67,19 +67,20 @@ public class UsuarioBean {
 
 	private EntityLazyModel usuarioLazy;
 
-
 	private String contato;
 
 	public UsuarioBean() {
-		
+
 	}
-	
+
 	@PostConstruct
-	public void init(){
-		Map<String, String> mapa = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();		
-		if(mapa.get("codUsuario") != null){
-			System.out.println("USER _______ "+mapa.get("codUsuario"));
-			this.usuario = this.uRep.obterUsuarioPorLogin(mapa.get("codUsuario"));
+	public void init() {
+		Map<String, String> mapa = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestParameterMap();
+		if (mapa.get("codUsuario") != null) {
+			System.out.println("USER _______ " + mapa.get("codUsuario"));
+			this.usuario = this.service.obterUsuarioPorLogin(mapa
+					.get("codUsuario"));
 			this.normalizarInformacoes();
 		}
 	}
@@ -100,74 +101,80 @@ public class UsuarioBean {
 			this.usuario.setDataCadastro(new Date());
 		else
 			this.usuario.setDataAlteracao(new Date());
-		if(this.defensoriaBean.getDefensoria() != null)
-			this.usuario.setIdDefensoria(this.defensoriaBean.getDefensoria().getId());
+		if (this.defensoriaBean.getDefensoria() != null)
+			this.usuario.setIdDefensoria(this.defensoriaBean.getDefensoria()
+					.getId());
 		else
 			this.usuario.setIdDefensoria(null);
-		this.usuario.setUnidade(this.unidadeBean.getUnidade());		
+		this.usuario.setUnidade(this.unidadeBean.getUnidade());
 		List<Grupo> grupos = new ArrayList<Grupo>();
 		grupos.add(this.grupo);
-		this.usuario.setGrupo(grupos);		
-		this.usuario = this.uRep.update(this.usuario);
-		//verifica se existe substituiï¿½ï¿½es para esse defensor
-		this.usuarioSubstituicao2 = this.uRep.obterUsuarioSubstituicaoPorLogin(this.usuario.getLogin(), "EU_SUBSTITUO");
-		if(this.usuarioSubstituicao2 != null){
-			this.uRep.registraLoginSubstituicao(this.usuarioSubstituicao2.getLoginSubstituicao(),
-												null);
+		this.usuario.setGrupo(grupos);
+		this.usuario = this.service.atualizar(this.usuario);
+		// verifica se existe substituiaaes para esse defensor
+		this.usuarioSubstituicao2 = this.service
+				.obterUsuarioSubstituicaoPorLogin(this.usuario.getLogin(),
+						"EU_SUBSTITUO");
+		if (this.usuarioSubstituicao2 != null) {
+			this.service.registraLoginSubstituicao(
+					this.usuarioSubstituicao2.getLoginSubstituicao(), null);
 		}
-		//seta informaï¿½ï¿½es defensor substituto		
-		if(this.usuarioSubstituicao != null){
-			this.uRep.registraLoginSubstituicao(this.usuarioSubstituicao.getLoginSubstituicao(),
-												this.usuario.getLogin());			
+		// seta informaaaes defensor substituto
+		if (this.usuarioSubstituicao != null) {
+			this.service.registraLoginSubstituicao(
+					this.usuarioSubstituicao.getLoginSubstituicao(),
+					this.usuario.getLogin());
 		}
-		
 
-		fc.addMessage(null, new FacesMessage("Informaï¿½ï¿½es do usuï¿½rio "
+		fc.addMessage(null, new FacesMessage("Informaaaes do usuario "
 				+ this.usuario.getLogin() + " salvas  com sucesso!"));
-		
+
 		this.usuarioSubstituicao2 = new Substituicao();
 	}
-	
+
 	/**
 	 * Insere/Altera o objeto dados Assessoria
 	 */
 	public void insertDadosAssessoria() {
 		FacesContext fc = FacesContext.getCurrentInstance();
-		
-		this.dadosAssessoria.setUnidade(this.unidadeBean.getUnidadeAssessoria());
+
+		this.dadosAssessoria
+				.setUnidade(this.unidadeBean.getUnidadeAssessoria());
 		this.dadosAssessoria.setUsuario(this.usuarioAssessoria);
 		this.usuario.getDadosAssessoria().add(this.dadosAssessoria);
-		this.uRep.update(this.usuario);
-		fc.addMessage(null, new FacesMessage("Assessoria adicionada com sucesso!"));
+		this.service.atualizar(this.usuario);
+		fc.addMessage(null, new FacesMessage(
+				"Assessoria adicionada com sucesso!"));
 		this.dadosAssessoria = new DadosAssessoria();
 	}
-	
+
 	/**
 	 * Exclui um objeto dados Assessoria da lista
 	 */
 	public void excluirDadosAssessoria() {
 		FacesContext fc = FacesContext.getCurrentInstance();
 		this.usuario.getDadosAssessoria().remove(this.dadosAssessoria);
-		this.uRep.update(this.usuario);
-		fc.addMessage(null,
-				new FacesMessage("Dados assessoria removido com sucesso!"));
+		this.service.atualizar(this.usuario);
+		fc.addMessage(null, new FacesMessage(
+				"Dados assessoria removido com sucesso!"));
 	}
-	
+
 	/**
-	 * Lista os nomes dos usuï¿½rios que contem parte do parametro
-	 * informado
-	 * @param query - parametro informado pelo usuï¿½rio
+	 * Lista os nomes dos usuario que contem parte do parametro informado
+	 * 
+	 * @param query
+	 *            - parametro informado pelo usuario
 	 * @return List<String>
 	 */
 	public List<String> filtrarUsuariosPorNome(String query) {
-		return this.uRep.filtrarUsuariosPorNome(query);
+		return this.service.filtrarUsuariosPorNome(query);
 	}
 
 	/**
 	 * Busca todas usuarios
 	 */
 	public List<Usuario> getSelecionarTudo() {
-		return uRep.selectAll();
+		return service.listaTodosUsuarios();
 	}
 
 	/**
@@ -175,8 +182,9 @@ public class UsuarioBean {
 	 */
 	public void excluir() {
 		FacesContext fc = FacesContext.getCurrentInstance();
-		this.uRep.remove(this.usuario);
-		fc.addMessage(null, new FacesMessage("Usuario excluï¿½do com sucesso!"));
+		this.service.remover(this.usuario);
+		fc.addMessage(null, new FacesMessage("Usuario excluado com sucesso!"));
+		init();
 	}
 
 	/**
@@ -192,26 +200,32 @@ public class UsuarioBean {
 	}
 
 	/**
-	 * Normaliza as informaï¿½ï¿½es para jogar na View
+	 * Normaliza as informaaaes para jogar na View
 	 */
 	public void normalizarInformacoes() {
 		this.defensoriaBean.setDefensoria(new Defensoria());
-		this.municipioDistritoBean.getMunicipioD().setNome(this.usuario.getUnidade().getMunicipioDistrito().getNome());
-		
+		this.municipioDistritoBean.getMunicipioD().setNome(
+				this.usuario.getUnidade().getMunicipioDistrito().getNome());
+
 		this.unidadeBean.setUnidades(this.unidadeBean
-				.obterUnidadesPorMunicipio(this.usuario.getUnidade().getMunicipioDistrito().getId()));
-		this.unidadeBean.setUnidade(this.usuario == null ? new Unidade()
-				: this.usuario.getUnidade());		
-		
+				.obterUnidadesPorMunicipio(this.usuario.getUnidade()
+						.getMunicipioDistrito().getId()));
+		this.unidadeBean.setUnidade(this.usuario == null
+				? new Unidade()
+				: this.usuario.getUnidade());
+
 		this.grupo = usuario.getGrupo().get(0);
-		
+
 		this.defensoriaBean.obterListaDefensorias();
-		if(this.usuario.getIdDefensoria() != null)
-			this.defensoriaBean.setDefensoria(this.defensoriaBean.obterDefensoriaPorId(this.usuario.getIdDefensoria()));
-		
-		//verifica se existe substituiï¿½ï¿½es para esse defensor
-		this.usuarioSubstituicao = this.uRep.obterUsuarioSubstituicaoPorLogin(this.usuario.getLogin(), "EU_SUBSTITUO");
-		if(this.usuarioSubstituicao == null){
+		if (this.usuario.getIdDefensoria() != null)
+			this.defensoriaBean.setDefensoria(this.defensoriaBean
+					.obterDefensoriaPorId(this.usuario.getIdDefensoria()));
+
+		// verifica se existe substituiaaes para esse defensor
+		this.usuarioSubstituicao = this.service
+				.obterUsuarioSubstituicaoPorLogin(this.usuario.getLogin(),
+						"EU_SUBSTITUO");
+		if (this.usuarioSubstituicao == null) {
 			this.usuarioSubstituicao = new Substituicao();
 		}
 		this.usuarioSubstituicao2 = new Substituicao();
@@ -232,7 +246,7 @@ public class UsuarioBean {
 		}
 		return itens;
 	}
-	
+
 	/**
 	 * Retorna uma lista de grupos a partir do enum Grupo
 	 * 
@@ -241,39 +255,47 @@ public class UsuarioBean {
 	public List<Grupo> getObterTodosGrupos() {
 		return Arrays.asList(Grupo.values());
 	}
-	
+
 	/**
-	 * Obtem usuario do Grupo DEFENSOR, e de acordo com a unidade do usuï¿½rio logado.
+	 * Obtem usuario do Grupo DEFENSOR, e de acordo com a unidade do usuario
+	 * logado.
+	 * 
 	 * @see UsuarioRepositorio - obterDefensoresParaDesignacao
 	 * @return List<Usuario>
 	 */
 	public List<Usuario> getObterDefensoresPorUnidade() {
-		if(this.usuarios.isEmpty())
-			this.usuarios = uRep.obterDefensoresParaDesignacao(obterUsuarioDaSessao().getUnidade().getId(),
-					Grupo.DEFENSOR);		
-		
+		if (this.usuarios.isEmpty())
+			this.usuarios = service
+					.obterDefensoresParaDesignacao(obterUsuarioDaSessao()
+							.getUnidade().getId(), Grupo.DEFENSOR);
+
 		for (Usuario u : this.usuarios) {
-			//se for != de null entï¿½o este defensor estï¿½ substituindo outro
-			if(u.getLoginSubstituicao() != null){
-				this.usuarioSubstituicao = this.uRep.obterUsuarioSubstituicaoPorLogin(u.getLoginSubstituicao(),"ME_SUBSTITUI");
-				u.setIdDefensoriaSubstituicao(this.usuarioSubstituicao.getIdDefensoriaSubstituicao());
-				u.setNomeDefensorSubstituto(this.usuarioSubstituicao.getNomeDefensorSubstituto());
+			// se for != de null então este defensor esta substituindo outro
+			if (u.getLoginSubstituicao() != null) {
+				this.usuarioSubstituicao = this.service
+						.obterUsuarioSubstituicaoPorLogin(
+								u.getLoginSubstituicao(), "ME_SUBSTITUI");
+				u.setIdDefensoriaSubstituicao(this.usuarioSubstituicao
+						.getIdDefensoriaSubstituicao());
+				u.setNomeDefensorSubstituto(this.usuarioSubstituicao
+						.getNomeDefensorSubstituto());
 			}
-		}	
+		}
 		return this.usuarios;
-		 
-	}
-	
-	/**
-	 * Obtem defensores 
-	 * @return List<Substituicao>
-	 */
-	public void obterDefensores() {		
-		this.usuariosSubstituicao = uRep.obterDefensores(Grupo.DEFENSOR);
+
 	}
 
 	/**
-	 * Mï¿½todo para tratar o evento de seleï¿½ï¿½o SelectEvent
+	 * Obtem defensores
+	 * 
+	 * @return List<Substituicao>
+	 */
+	public void obterDefensores() {
+		this.usuariosSubstituicao = service.obterDefensores(Grupo.DEFENSOR);
+	}
+
+	/**
+	 * Matodo para tratar o evento de seleaão SelectEvent
 	 * 
 	 * @param event
 	 */
@@ -283,23 +305,37 @@ public class UsuarioBean {
 		this.unidadeBean.setUnidades(this.unidadeBean
 				.obterUnidadesPorMunicipio(this.municipioDistritoBean
 						.getMunicipioD().getId()));
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(event.getObject().toString() + " SELECIONADO!", event.getObject().toString()));
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(event.getObject().toString() + " Unidades carregadas!", event.getObject()
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				new FacesMessage(
+						event.getObject().toString() + " SELECIONADO!", event
+								.getObject().toString()));
+		FacesContext.getCurrentInstance()
+				.addMessage(
+						null,
+						new FacesMessage(event.getObject().toString()
+								+ " Unidades carregadas!", event.getObject()
 								.toString()));
 	}
-	
+
 	/**
-	 * Mï¿½todo para tratar o evento de seleï¿½ï¿½o de usuï¿½rios assessoria
+	 * Matodo para tratar o evento de selecao de usuario assessoria
 	 * 
 	 * @param event
 	 */
 	public void onItemSelect2(SelectEvent event) {
-		this.usuarioAssessoria = this.uRep.obterUsuarioPorNome(this.usuarioAssessoria.getNome());
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(event.getObject().toString() + " SELECIONADO!", event.getObject().toString()));
+		this.usuarioAssessoria = this.service
+				.obterUsuarioPorNome(this.usuarioAssessoria.getNome());
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				new FacesMessage(
+						event.getObject().toString() + " SELECIONADO!", event
+								.getObject().toString()));
 	}
-	
+
 	/**
-	 * Obter usuï¿½rio da sessï¿½o
+	 * Obter usuario da sessão
+	 * 
 	 * @return Usuario
 	 */
 	public Usuario obterUsuarioDaSessao() {
@@ -419,5 +455,5 @@ public class UsuarioBean {
 	public void setDefensoriaBean(DefensoriaBean defensoriaBean) {
 		this.defensoriaBean = defensoriaBean;
 	}
-			
+
 }

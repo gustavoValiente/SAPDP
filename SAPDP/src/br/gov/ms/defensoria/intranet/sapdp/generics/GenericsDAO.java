@@ -3,6 +3,8 @@ package br.gov.ms.defensoria.intranet.sapdp.generics;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -52,6 +54,19 @@ public class GenericsDAO<ENTITY> {
 		EntityManager em = getEntityManager();
 		em.remove(findById(pk));
 		logger.info("Remove successful");
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public boolean remove(ENTITY obj) {
+		try {
+			EntityManager em = getEntityManager();
+			obj = em.merge(obj);
+			em.remove(obj);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public void detach(ENTITY entity) {
@@ -145,8 +160,5 @@ public class GenericsDAO<ENTITY> {
 	public void setClazzBiz(Class<ENTITY> pClazzBiz) {
 		this.clazzBiz = pClazzBiz;
 	}
-	
-	
-   
 
 }
