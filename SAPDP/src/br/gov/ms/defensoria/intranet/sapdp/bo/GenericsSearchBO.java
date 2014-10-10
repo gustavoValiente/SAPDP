@@ -20,6 +20,7 @@ public class GenericsSearchBO {
 	public List<IGenericEntity> carregarPesquisaLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
 			Map<String, Object> parametros, IGenericEntity entity) {
+		
 		return dao.carregarPesquisaLazy(startingAt, maxPerPage, fieldOrder,
 				order, parametros, entity);
 	}

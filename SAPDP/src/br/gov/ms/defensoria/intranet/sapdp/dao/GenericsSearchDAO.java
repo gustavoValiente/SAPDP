@@ -83,6 +83,7 @@ public class GenericsSearchDAO {
 	public List<IGenericEntity> carregarPesquisaUsuarioLazy(int startingAt,
 			int maxPerPage, String fieldOrder, String order,
 			Map<String, Object> parametros) {
+		
 
 		String jpql = "SELECT entity FROM Usuario entity where entity.login <> 'master' ";
 
