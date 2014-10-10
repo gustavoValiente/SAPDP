@@ -76,14 +76,23 @@ public class DesignacaoBO {
 		c2.set(Calendar.MILLISECOND, 99);
 	}
 	
-	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(
-			String defensor) throws ParseException {
+	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(String defensor, String tipoDesignacao) throws ParseException {
 
 		normalizaDatasAtuais();
 		
-		return dao.filtrarDesignacoesPorDefensorData(defensor,  c1.getTime(), c2.getTime());		
+		return dao.filtrarDesignacoesPorDefensorData(defensor,  c1.getTime(), c2.getTime(), tipoDesignacao);		
 		
 	}
+	
+	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorDataPenal(String defensor, String tipoDesignacao) throws ParseException {
+
+		normalizaDatasAtuais();
+		
+		return dao.filtrarDesignacoesPorDefensorData(defensor,  c1.getTime(), c2.getTime(), tipoDesignacao);		
+		
+	}
+	
+	
 
 	/**
 	 * Retorna uma lista de designacoes do dia, implementa��o LazyModel
@@ -127,6 +136,7 @@ public class DesignacaoBO {
 			designacao.setDefensor(usuario);
 			designacao.setDataDesignacao(new Date());
 			designacao.setStatus(StatusDesignacao.DESIGNADO);
+			designacao.setTipoDesignacao("PENAL");
 			return dao.inserir(designacao);
 		} catch (NoResultException e) {
 			e.printStackTrace();

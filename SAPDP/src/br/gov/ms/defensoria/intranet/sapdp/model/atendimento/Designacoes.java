@@ -71,6 +71,7 @@ public class Designacoes implements IGenericEntity {
 	private String loginSubstituicao;
 	@Column(length = 30)
 	private String sala;
+	@Column(columnDefinition = "varchar(255) default 'PADRAO'")
 	private String tipoDesignacao;
 	
 	public Designacoes() {
@@ -214,8 +215,11 @@ public class Designacoes implements IGenericEntity {
 		result = prime * result + ((nucleo == null) ? 0 : nucleo.hashCode());
 		result = prime * result
 				+ ((preferencial == null) ? 0 : preferencial.hashCode());
+		result = prime * result + ((sala == null) ? 0 : sala.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result
+				+ ((tipoDesignacao == null) ? 0 : tipoDesignacao.hashCode());
 		return result;
 	}
 
@@ -278,12 +282,22 @@ public class Designacoes implements IGenericEntity {
 				return false;
 		} else if (!preferencial.equals(other.preferencial))
 			return false;
+		if (sala == null) {
+			if (other.sala != null)
+				return false;
+		} else if (!sala.equals(other.sala))
+			return false;
 		if (senha == null) {
 			if (other.senha != null)
 				return false;
 		} else if (!senha.equals(other.senha))
 			return false;
 		if (status != other.status)
+			return false;
+		if (tipoDesignacao == null) {
+			if (other.tipoDesignacao != null)
+				return false;
+		} else if (!tipoDesignacao.equals(other.tipoDesignacao))
 			return false;
 		return true;
 	}

@@ -67,20 +67,47 @@ public class DesignacaoDAO {
 	}
 	
 	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorData(
-			String defensor, Date dataInicio, Date dataFim) throws ParseException {
+			String defensor, Date dataInicio, Date dataFim, String tipoDesignacao) throws ParseException {
 
 		TypedQuery<SimpleDesignacao> query = dao.getEntityManager()
 				.createQuery(
 						"select NEW br.gov.ms.defensoria.intranet.sapdp.model.atendimento.SimpleDesignacao(d.id, d.assistido.nome, "
 								+ "d.defensor.login, d.preferencial, d.dataDesignacao, d.nucleo.nome, d.status, d.idAtendimentoPai, "
-								+ "d.loginSubstituicao) "
-								+ "from Designacoes d where (d.defensor.login = :defensor OR d.loginSubstituicao = :defensor)"
+								+ "d.loginSubstituicao, d.tipoDesignacao) "
+								+ "from Designacoes d where (d.defensor.login = :defensor OR d.loginSubstituicao = :defensor) "
 								+ "and d.dataDesignacao BETWEEN :dataInicio and :dataFim "
-								+ "and (d.status <> :status)",
+								+ "and (d.status <> :status) "
+								+ "and (d.tipoDesignacao = :tipoDesignacao)",
 						SimpleDesignacao.class);
 		query.setParameter("defensor", defensor);
 		query.setParameter("dataInicio", dataInicio);
 		query.setParameter("dataFim", dataFim);
+		query.setParameter("tipoDesignacao", tipoDesignacao);
+		query.setParameter("status", StatusDesignacao.CONCLUIDO);
+		
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			return new ArrayList<SimpleDesignacao>();
+		}
+	}
+	
+	public List<SimpleDesignacao> filtrarDesignacoesPorDefensorDataPenal(
+			String defensor, Date dataInicio, Date dataFim, String tipoDesignacao) throws ParseException {
+
+		TypedQuery<SimpleDesignacao> query = dao.getEntityManager()
+				.createQuery(
+						"select NEW br.gov.ms.defensoria.intranet.sapdp.model.atendimento.SimpleDesignacao(d.id, d.assistido.nome, "
+								+ "d.defensor.login, d.dataDesignacao, d.status, d.loginSubstituicao, d.tipoDesignacao) "
+								+ "from Designacoes d where (d.defensor.login = :defensor OR d.loginSubstituicao = :defensor) "
+								+ "and d.dataDesignacao BETWEEN :dataInicio and :dataFim "
+								+ "and (d.status <> :status) "
+								+ "and (d.tipoDesignacao = :tipoDesignacao)",
+						SimpleDesignacao.class);
+		query.setParameter("defensor", defensor);
+		query.setParameter("dataInicio", dataInicio);
+		query.setParameter("dataFim", dataFim);
+		query.setParameter("tipoDesignacao", tipoDesignacao);
 		query.setParameter("status", StatusDesignacao.CONCLUIDO);
 		
 		try {

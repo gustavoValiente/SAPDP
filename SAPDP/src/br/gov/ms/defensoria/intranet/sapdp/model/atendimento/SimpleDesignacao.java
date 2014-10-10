@@ -22,11 +22,12 @@ public class SimpleDesignacao {
 	private StatusDesignacao statusDesignacao;
 	private Long idAtendimentoPai;
 	private String loginSubstituicao;
+	private String tipoDesignacao;
 	
 	
-	public SimpleDesignacao(Long idDesignacao, String nomeAssistido,
-			String loginDefensor, String preferencial, Date dataDesignacao,
-			String nucleo, StatusDesignacao statusDesignacao, Long idAtendimentoPai, String loginSubstituicao) {
+	public SimpleDesignacao(Long idDesignacao, String nomeAssistido, String loginDefensor, String preferencial, 
+			Date dataDesignacao, String nucleo, StatusDesignacao statusDesignacao, Long idAtendimentoPai, 
+			String loginSubstituicao, String tipoDesignacao) {
 		super();
 		this.idDesignacao = idDesignacao;
 		this.nomeAssistido = nomeAssistido;
@@ -37,6 +38,20 @@ public class SimpleDesignacao {
 		this.statusDesignacao = statusDesignacao;
 		this.idAtendimentoPai = idAtendimentoPai;
 		this.loginSubstituicao = loginSubstituicao;
+		this.tipoDesignacao = tipoDesignacao;
+	}
+	
+	public SimpleDesignacao(Long idDesignacao, String nomeAssistido, String loginDefensor, String preferencial, 
+			Date dataDesignacao, StatusDesignacao statusDesignacao, Long idAtendimentoPai, 
+			String loginSubstituicao, String tipoDesignacao) {
+		super();
+		this.idDesignacao = idDesignacao;
+		this.nomeAssistido = nomeAssistido;
+		this.loginDefensor = loginDefensor;		
+		this.dataDesignacao = dataDesignacao;		
+		this.statusDesignacao = statusDesignacao;		
+		this.loginSubstituicao = loginSubstituicao;
+		this.tipoDesignacao = tipoDesignacao;
 	}
 
 	public SimpleDesignacao() {
@@ -131,5 +146,15 @@ public class SimpleDesignacao {
 	public void setLoginSubstituicao(String loginSubstituicao) {
 		this.loginSubstituicao = loginSubstituicao;
 	}
+
+	public String getTipoDesignacao() {
+		return tipoDesignacao;
+	}
+
+	public void setTipoDesignacao(String tipoDesignacao) {
+		this.tipoDesignacao = tipoDesignacao;
+	}
+	
+	
 	
 }
