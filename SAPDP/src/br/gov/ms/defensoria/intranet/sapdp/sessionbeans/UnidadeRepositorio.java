@@ -28,7 +28,7 @@ public class UnidadeRepositorio extends GenericDAOImpl<Unidade> {
 	}
 
 	/**
-	 * Retorna uma lista de unidades, implementação LazyModel
+	 * Retorna uma lista de unidades, implementaï¿½ï¿½o LazyModel
 	 * 
 	 * @return <code>List<Unidade></code>
 	 */
@@ -40,7 +40,7 @@ public class UnidadeRepositorio extends GenericDAOImpl<Unidade> {
 			jpql += " AND u.nome LIKE :nome";
 		if (!municipio.isEmpty())
 			jpql += " AND u.municipioDistrito.nome LIKE :municipio";
-		// Ordenação
+		// Ordenaï¿½ï¿½o
 		if (!fieldOrder.isEmpty())
 			jpql += " ORDER BY " + fieldOrder + " " + order;
 
@@ -58,7 +58,7 @@ public class UnidadeRepositorio extends GenericDAOImpl<Unidade> {
 	}
 
 	/**
-	 * Retorna total unidades , implementação LazyModel
+	 * Retorna total unidades , implementaï¿½ï¿½o LazyModel
 	 * 
 	 * @return <code>int</code>
 	 */
@@ -115,4 +115,9 @@ public class UnidadeRepositorio extends GenericDAOImpl<Unidade> {
 		return query.getSingleResult();
 	}
 	
+	public List<String> filtrarUnidadesPorNome(String nome) {
+		TypedQuery<String> query = getEm().createQuery("select u from Unidade u where u.nome like :nome ",String.class);
+		query.setParameter("nome", "%"+nome+"%");
+		return query.getResultList();
+	}
 }

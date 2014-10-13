@@ -31,6 +31,18 @@ public class MunicipioDistritoRepositorio extends
 		query.setParameter("nome", "%"+nome+"%");
 		return query.getResultList();
 	}
+	/**
+	 * Retorna uma lista de String com os nomes dos MunicipiosDistritos por Estado
+	 * @param query - String
+	 * @return String
+	 */
+	public List<String> filtrarMunicipiosDistritosPorEstado(String nome) {
+		TypedQuery<String> query = getEm().createQuery("select n.nome from MunicipioDistrito n "
+				+ "where n.estado.sigla = :siglaEstado and n.nome LIKE :nome",String.class);		
+		query.setParameter("siglaEstado", "MS");
+		query.setParameter("nome", "%"+nome+"%");
+		return query.getResultList();
+	}
 	
 	/**
 	 * Retorna um objeto MunicipioDistrito
@@ -44,7 +56,7 @@ public class MunicipioDistritoRepositorio extends
 	}
 	
 	/**
-	 * Retorna município por Id
+	 * Retorna municï¿½pio por Id
 	 * @param id - Long
 	 * @return MunicipioDistrito
 	 */
@@ -55,7 +67,7 @@ public class MunicipioDistritoRepositorio extends
 	}
 	
 	/**
-	 * Retorna uma lista de profissões, implementação LazyModel
+	 * Retorna uma lista de profissï¿½es, implementaï¿½ï¿½o LazyModel
 	 * @return <code>List<Profissao></code>
 	 */
 	public List<MunicipioDistrito> carregarMunicipiosDistritosLazy(int startingAt, int maxPerPage,
@@ -68,7 +80,7 @@ public class MunicipioDistritoRepositorio extends
 			jpql += " AND m.estado.nome LIKE :estado";
 		if(!regional.isEmpty())
 			jpql += " AND m.regional.nome LIKE :regional";
-		//Ordenação
+		//Ordenaï¿½ï¿½o
 		if (!fieldOrder.isEmpty())
 			jpql += " ORDER BY " + fieldOrder + " " + order;
 		
@@ -88,7 +100,7 @@ public class MunicipioDistritoRepositorio extends
 	}
 	
 	/**
-	 * Retorna total profissoes , implementação LazyModel
+	 * Retorna total profissoes , implementaï¿½ï¿½o LazyModel
 	 * @return <code>int</code>
 	 */
 	public int carregarTotalMunicipiosDistritosLazy(int startingAt, int maxPerPage,

@@ -38,11 +38,15 @@
         						disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" 
         						style="margin-left:10px; vertical-align: middle;" />
 						</p:column>
-						<p:column>
-							<p:commandButton value="Gerar DOC" action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-print" 
-								process="panelRegistra" update=":form_registra, :form_espera, :form_atendidos:panelAtendidos"  
-								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" />
-						</p:column>
+					  	<p:column>
+				        	<p:commandButton value="Info Sigo" icon="ui-icon-squaresmall-plus" 
+				        		actionListener="#{gerenciaAtendimentoBean.obterInformacoesDoAssistido}" oncomplete="PF('dialogPena').show();" 
+					        	style="width:115px" process="@this" update=":form_pena"
+				        		disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}">
+				        			<f:setPropertyActionListener target="#{gerenciaAtendimentoBean.processoBean.idAssistido}" 
+				        				value="#{gerenciaAtendimentoBean.designacaoBean.designacao.assistido.id}"/>							        		
+			        		</p:commandButton>											
+				        </p:column>
 					</p:row>
 					<p:row>
 				        <p:column styleClass="tam_coluna">
@@ -61,9 +65,10 @@
 					        </p:selectOneMenu>												
 						</p:column>	
 						<p:column>
-				        	<p:commandButton value="Fato Narrado" icon="ui-icon-document" type="button" onclick="PF('dialogFato').show();" 
-				        	style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>											
-				        </p:column>	
+							<p:commandButton value="Gerar DOC" action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-print" 
+								process="panelRegistra" update=":form_registra, :form_espera, :form_atendidos:panelAtendidos"  
+								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}" />
+						</p:column>	
 					</p:row>
 					<p:row>									
 				        <p:column styleClass="tam_coluna">
@@ -80,14 +85,11 @@
 					            <f:selectItems value="#{gerenciaAtendimentoBean.itemBean.itens}" var="i" itemLabel="#{i.nome}" itemValue="#{i}" />
 				        	        <h:outputText value="#{i.nome}" />						           						 
 					        </p:selectOneMenu>	
-			        	</p:column>	
+			        	</p:column>
 						<p:column>
-							<p:commandButton value="#{(gerenciaAtendimentoBean.atendimentoBean.simpleAtendimento.idAtendimento == null and 
-								gerenciaAtendimentoBean.atendimentoBean.atendimento.id == null) ? 'Registrar':'Editar'}" 
-								action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-disk" process="panelRegistra" 
-								update=":form_registra, :form_espera:listaAssistidoEspera, :form_atendidos:panelAtendidos, :historico_atendidos:panelHistAssis"  
-								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>
-						</p:column>	 
+				        	<p:commandButton value="Fato Narrado" icon="ui-icon-document" type="button" onclick="PF('dialogFato').show();" 
+				        	style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>											
+				        </p:column>	 
 			       </p:row>
 			       <p:row>
 			        	<p:column styleClass="tam_coluna">
@@ -100,7 +102,14 @@
 					            <f:selectItems value="#{gerenciaAtendimentoBean.subItemBean.subitens}" var="i" itemLabel="#{i.nome}" itemValue="#{i}" />
 				        	        <h:outputText value="#{i.nome}" />						           						 
 					        </p:selectOneMenu>
-					    </p:column>
+					    </p:column>					    
+						<p:column>
+							<p:commandButton value="#{(gerenciaAtendimentoBean.atendimentoBean.simpleAtendimento.idAtendimento == null and 
+								gerenciaAtendimentoBean.atendimentoBean.atendimento.id == null) ? 'Registrar':'Editar'}" 
+								action="#{gerenciaAtendimentoBean.insertAtend}" icon="ui-icon-disk" process="panelRegistra" 
+								update=":form_registra, :form_espera:listaAssistidoEspera, :form_atendidos:panelAtendidos, :historico_atendidos:panelHistAssis"  
+								style="width:115px" disabled="#{empty gerenciaAtendimentoBean.designacaoBean.designacao.assistido.nome}"/>
+						</p:column>
 				   </p:row>
 			       <p:row>		
 			       		<p:column styleClass="tam_coluna">										

@@ -8,7 +8,11 @@ package br.gov.ms.defensoria.intranet.sapdp.model.penal;
  * 
  */
 public enum Regime {
-	REGIME_FECHADO("Regime Fechado"), SEMI_ABERTO("Semi Aberto"), ABERTO("Aberto"), LIVRAMENTO_CONDICIONAL("Livramento Condicional"), EXTINCAO("Extinção");
+	REGIME_FECHADO("Regime Fechado"), 
+	SEMI_ABERTO("Semi Aberto"), 
+	ABERTO("Aberto"), 
+	LIVRAMENTO_CONDICIONAL("Livramento Condicional"), 
+	EXTINCAO("ExtinÃ§Ã£o");
 
 	private String texto;
 

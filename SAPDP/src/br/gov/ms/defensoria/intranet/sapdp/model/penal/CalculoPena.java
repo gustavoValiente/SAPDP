@@ -28,7 +28,7 @@ public class CalculoPena {
 	private Long id;		
 	@OneToOne
 	@JoinColumn(name = "id_processo")
-	private Processos processo;
+	private Processo processo;
 	
 	@Temporal(TemporalType.DATE)
 	private Date dataBasePena;
@@ -60,12 +60,12 @@ public class CalculoPena {
 	}
 
 
-	public Processos getProcesso() {
+	public Processo getProcesso() {
 		return processo;
 	}
 
 
-	public void setProcesso(Processos processo) {
+	public void setProcesso(Processo processo) {
 		this.processo = processo;
 	}
 	

@@ -9,10 +9,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.LazyDataModel;
 
 import br.gov.ms.defensoria.intranet.sapdp.lazymodels.EntityLazyModel;
-import br.gov.ms.defensoria.intranet.sapdp.lazymodels.MunicipioDistritoLazyModel;
 import br.gov.ms.defensoria.intranet.sapdp.model.MunicipioDistrito;
 import br.gov.ms.defensoria.intranet.sapdp.sessionbeans.MunicipioDistritoRepositorio;
 
@@ -104,6 +102,10 @@ public class MunicipioDistritoBean {
 	 */
 	public List<String> filtrarMunicipiosDistritos(String query) {
 		return this.mRep.filtrarMunicipiosDistritosPorNome(query);
+	}
+	
+	public List<String> filtrarMunicipiosDistritosPorEstado(String query){
+		return this.mRep.filtrarMunicipiosDistritosPorEstado(query);
 	}
 	
 	public MunicipioDistrito buscarMunicipioDistrito(String nome) {

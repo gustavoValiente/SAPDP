@@ -17,6 +17,7 @@ import br.gov.ms.defensoria.intranet.sapdp.bo.EstabelecimentoPenalBO;
 import br.gov.ms.defensoria.intranet.sapdp.bo.GenericsSearchBO;
 import br.gov.ms.defensoria.intranet.sapdp.bo.GrupoRemicaoBO;
 import br.gov.ms.defensoria.intranet.sapdp.bo.GrupoRemicaoSigoBO;
+import br.gov.ms.defensoria.intranet.sapdp.bo.ProcessoBO;
 import br.gov.ms.defensoria.intranet.sapdp.bo.TotalRemicaoBO;
 import br.gov.ms.defensoria.intranet.sapdp.bo.UsuarioBO;
 import br.gov.ms.defensoria.intranet.sapdp.generics.IGenericEntity;
@@ -31,6 +32,7 @@ import br.gov.ms.defensoria.intranet.sapdp.model.assistido.preso.TotalRemicao;
 import br.gov.ms.defensoria.intranet.sapdp.model.atendimento.Designacoes;
 import br.gov.ms.defensoria.intranet.sapdp.model.atendimento.SimpleDesignacao;
 import br.gov.ms.defensoria.intranet.sapdp.model.atendimento.StatusDesignacao;
+import br.gov.ms.defensoria.intranet.sapdp.model.penal.Processo;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Grupo;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Substituicao;
 import br.gov.ms.defensoria.intranet.sapdp.model.usuarios.Usuario;
@@ -71,6 +73,9 @@ public class SegurancaService {
 
 	@EJB
 	private UsuarioBO usuarioBO;
+	
+	@EJB
+	private ProcessoBO processoBO;
 
 	public EstabelecimentoPenal obterEstabelecimentoPorNome(String nome) {
 		return estabelecimentoPenalBO.obterEstabelecimentoPorNome(nome);
@@ -282,6 +287,22 @@ public class SegurancaService {
 
 	public List<Usuario> listaTodosUsuarios() {
 		return usuarioBO.listaTodos();
+	}
+	
+	public List<Processo> listaTodosProcessos() {
+		return processoBO.listaTodos();
+	}
+
+	public Processo inserir(Processo entity) {
+		return processoBO.inserir(entity);
+	}
+
+	public Processo atualizar(Processo entity) {
+		return processoBO.atualizar(entity);
+	}
+
+	public void removerProcesso(Long id) {
+		processoBO.remover(id);
 	}
 
 }

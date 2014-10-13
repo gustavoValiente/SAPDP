@@ -10,6 +10,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.SelectEvent;
+
 import br.gov.ms.defensoria.intranet.sapdp.lazymodels.EntityLazyModel;
 import br.gov.ms.defensoria.intranet.sapdp.model.Unidade;
 import br.gov.ms.defensoria.intranet.sapdp.sessionbeans.UnidadeRepositorio;
@@ -124,6 +126,15 @@ public class UnidadeBean {
 		this.municipioDistritoBean = municipioDistritoBean;
 	}
 
+	public List<String> filtrarUnidades(String nome){
+		return uRep.filtrarUnidadesPorNome(nome);
+	}
+	
+	public void onItemSelect(SelectEvent event) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(event.getObject().toString() + " SELECIONADO!",event.getObject().toString()));
+        this.unidade = this.uRep.obterUnidadePorNome(event.getObject().toString());
+	}
+	
 	public Unidade getUnidade() {
 		return unidade;
 	}

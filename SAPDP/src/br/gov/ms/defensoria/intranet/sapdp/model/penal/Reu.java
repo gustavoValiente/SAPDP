@@ -8,7 +8,7 @@ package br.gov.ms.defensoria.intranet.sapdp.model.penal;
  * 
  */
 public enum Reu {
-	PRIMARIO("Primario"), REINCIDENTE("Reincidente"), TECNICAMENTE_PRIMARIO("Tecnicamente Prim·rio");
+	PRIMARIO("Primario"), REINCIDENTE("Reincidente"), TECNICAMENTE_PRIMARIO("Tecnicamente Prim√°rio");
 
 	private String texto;
 

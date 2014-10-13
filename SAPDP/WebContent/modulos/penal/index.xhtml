@@ -181,6 +181,25 @@
 				
 			</h:form>
 		</p:dialog>
+		<p:dialog header="Dados da Pena" id="dialogPena" widgetVar="dialogPena" width="1000" height="480" styleClass="dialog">
+			<h:form id="form_pena">
+				<p:growl id="msg" />
+				
+				<p:tabView id="tabView" style="min-height:360px">					
+					<p:tab title="Cadastro de Processo">						
+						<ui:include src="processo.xhtml"></ui:include>										
+						<p:commandButton value="Salvar" icon="ui-icon-disk"
+								actionListener="#{gerenciaAtendimentoBean.processoBean.salvar()}" process=":form_pena:tabView" 
+								update=":form_pena,:form_pena:msg" style="width:120px" >
+						</p:commandButton>
+					</p:tab>
+					<p:tab title="Consolidação de Pena">
+						
+					</p:tab>								
+				</p:tabView>
+			</h:form>
+		</p:dialog>
+		
 		<!-- Janela de confirmação global -->
 		<ui:include src="/confirmDialog.xhtml"/>
 		<ui:include src="/rodape.xhtml"/>

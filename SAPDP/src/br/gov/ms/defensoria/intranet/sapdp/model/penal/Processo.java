@@ -13,8 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import br.gov.ms.defensoria.intranet.sapdp.generics.IGenericEntity;
 import br.gov.ms.defensoria.intranet.sapdp.model.Area;
-import br.gov.ms.defensoria.intranet.sapdp.model.Unidade;
+import br.gov.ms.defensoria.intranet.sapdp.model.MunicipioDistrito;
 
 /**
  * 
@@ -24,9 +25,13 @@ import br.gov.ms.defensoria.intranet.sapdp.model.Unidade;
  * 
  */
 @Entity
-@Table(name = "TB_PROCESSOS")
-public class Processos {
+@Table(name = "TB_PROCESSO")
+public class Processo implements IGenericEntity{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;		
@@ -36,13 +41,13 @@ public class Processos {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 30)
 	private Reu reu;
-	private Integer numeroProcesso;
+	private String numeroProcesso;
 	@Enumerated(EnumType.STRING)
 	@Column(length = 30)
 	private Regime regime;
 	@OneToOne
-	@JoinColumn(name = "id_unidade")
-	private Unidade unidade;
+	@JoinColumn(name = "id_comarca")
+	private MunicipioDistrito comarca;
 	private Integer vara;
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
@@ -53,7 +58,7 @@ public class Processos {
 	private String resultado;
 	
 
-	public Processos() {
+	public Processo() {
 
 	}
 
@@ -107,13 +112,12 @@ public class Processos {
 		this.reu = reu;
 	}
 
-
-	public Integer getNumeroProcesso() {
+	public String getNumeroProcesso() {
 		return numeroProcesso;
 	}
 
 
-	public void setNumeroProcesso(Integer numeroProcesso) {
+	public void setNumeroProcesso(String numeroProcesso) {
 		this.numeroProcesso = numeroProcesso;
 	}
 
@@ -127,14 +131,15 @@ public class Processos {
 		this.regime = regime;
 	}
 
+	
 
-	public Unidade getUnidade() {
-		return unidade;
+	public MunicipioDistrito getComarca() {
+		return comarca;
 	}
 
 
-	public void setUnidade(Unidade unidade) {
-		this.unidade = unidade;
+	public void setComarca(MunicipioDistrito comarca) {
+		this.comarca = comarca;
 	}
 
 

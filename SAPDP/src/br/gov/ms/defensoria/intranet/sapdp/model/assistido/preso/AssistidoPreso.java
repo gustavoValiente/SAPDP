@@ -21,7 +21,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import br.gov.ms.defensoria.intranet.sapdp.model.assistido.Assistido;
-import br.gov.ms.defensoria.intranet.sapdp.model.penal.Processos;
+import br.gov.ms.defensoria.intranet.sapdp.model.penal.Processo;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class AssistidoPreso {
 	private CondutaCarceraria condutaCarceraria;
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
-	private List<Processos> processos;	
+	private List<Processo> processos;	
 	@ManyToOne	
 	@JoinColumn(name = "id_assistido")
 	private Assistido assistido;
@@ -71,11 +71,11 @@ public class AssistidoPreso {
 		this.condutaCarceraria = condutaCarceraria;
 	}
 
-	public List<Processos> getProcessos() {
+	public List<Processo> getProcessos() {
 		return processos;
 	}
 
-	public void setProcessos(List<Processos> processos) {
+	public void setProcessos(List<Processo> processos) {
 		this.processos = processos;
 	}
 

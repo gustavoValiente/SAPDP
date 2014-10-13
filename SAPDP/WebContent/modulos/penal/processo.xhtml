@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="gridProcessosPena">
+		<h:outputLabel value="Nome:" />
+		<p:inputText value="#{gerenciaAtendimentoBean.assistidoBean.assistido.nome}" readonly="true" size="50"/>
+		<h:outputLabel value="Réu:"/>
+		<p:selectOneRadio id="reu" value="#{gerenciaAtendimentoBean.processoBean.processo.reu}" required="true" requiredMessage="Informe o réu">
+			<f:selectItems value="#{gerenciaAtendimentoBean.processoBean.obterTipoReu}" var="r"
+							itemLabel="#{r.texto}" itemValue="#{r}"/>            
+        </p:selectOneRadio>
+		<h:outputLabel value="Número do Processo:" />
+		<p:inputText value="#{gerenciaAtendimentoBean.processoBean.processo.numeroProcesso}" size="30" required="true" 
+			requiredMessage="Informe número do processo" />
+		<h:outputLabel value="Regime:"/>					
+		<p:selectOneRadio id="regime" value="#{gerenciaAtendimentoBean.processoBean.processo.regime}"
+			required="true" requiredMessage="Informe o regime">
+			<f:selectItems value="#{gerenciaAtendimentoBean.processoBean.obterTipoRegime}" var="r"
+							itemLabel="#{r.texto}" itemValue="#{r}"/>
+		</p:selectOneRadio>
+		<h:outputLabel value="Comarca:"/>	
+		<p:autoComplete id="event" value="#{gerenciaAtendimentoBean.processoBean.processo.comarca}" maxResults="8" 
+			placeholder="Busque a comarca..." required="true" requiredMessage="Comarca Obrigatória!"
+	       	completeMethod="#{gerenciaAtendimentoBean.processoBean.municipioDistritoBean.filtrarMunicipiosDistritosPorEstado}" size="50">
+	           <p:ajax event="itemSelect" listener="#{gerenciaAtendimentoBean.processoBean.municipioDistritoBean.onItemSelect}" update=":form_pena:msg" />
+        </p:autoComplete>        
+		<h:outputLabel value="Vara:"/>
+		<p:inputText value="#{gerenciaAtendimentoBean.processoBean.processo.vara}" size="50" required="true" requiredMessage="Informe o número da vara"/>
+		<h:outputLabel value="Tipo de Vara:"/>
+		<p:selectOneRadio id="vara" value="#{gerenciaAtendimentoBean.processoBean.processo.tipoVara}"
+			required="true" requiredMessage="Informe o tipo de vara">
+			<f:selectItems value="#{gerenciaAtendimentoBean.processoBean.obterTipoVara}" var="v"
+							itemLabel="#{v}" itemValue="#{v}"/>            
+        </p:selectOneRadio>
+		<h:outputLabel value="Pena:"/>
+		<p:panelGrid columns="6">
+			<h:outputLabel value="Anos:"/>
+			<p:inputText value="#{gerenciaAtendimentoBean.processoBean.processo.anoPena}" size="10" required="true" requiredMessage="Informe os anos da pena"/>
+			<h:outputLabel value="Meses:"/>
+			<p:inputText value="#{gerenciaAtendimentoBean.processoBean.processo.mesPena}" size="10" required="true" requiredMessage="Informe os meses da pena"/>
+			<h:outputLabel value="Dias:"/>
+			<p:inputText value="#{gerenciaAtendimentoBean.processoBean.processo.diaPena}" size="10" required="true" requiredMessage="Informe os dias da pena"/>
+		</p:panelGrid>
+	</p:panelGrid>		
+	<p:dataTable id="dtProcessos" var="p" value="#{gerenciaAtendimentoBean.processoBean.listProcessos}" 
+				emptyMessage="Nenhum registro encontrado.">
+	        <p:column style="width:250px">
+				<f:facet name="header">
+					<h:outputText value="N° PROCESSO"/>
+				</f:facet>
+				<h:outputText value="#{p.numeroProcesso}"/>
+			</p:column>
+			<p:column style="width:180px">
+				<f:facet name="header">
+					<h:outputText value="RÉU"/>
+				</f:facet>
+				<h:outputText value="#{p.reu.texto}"/>
+			</p:column>
+			<p:column style="width:150px;text-align:center">
+				<f:facet name="header">
+					<h:outputText value="PENA"/>
+				</f:facet>
+				<h:outputText value="#{p.anoPena} ano(s), #{p.mesPena} mes(es), #{p.diaPena} dia(s)"/>
+			</p:column>
+			<p:column style="width:100px;text-align:center">
+				<f:facet name="header">
+					<h:outputText value="DATA INCLUSÃO"/>
+				</f:facet>
+				<h:outputText value="#{p.dataCadastro}">
+					<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy" timeZone="GMT-4"/>
+				</h:outputText>
+			</p:column>								      
+	  	</p:dataTable>
+	
+</ui:composition>

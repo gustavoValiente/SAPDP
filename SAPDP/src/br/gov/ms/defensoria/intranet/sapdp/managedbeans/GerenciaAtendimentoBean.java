@@ -48,6 +48,9 @@ public class GerenciaAtendimentoBean {
 	
 	@ManagedProperty(value = "#{subItemBean}")
 	private SubItemBean subItemBean;		
+	
+	@ManagedProperty(value = "#{processoBean}")
+	private ProcessoBean processoBean;
 
 	private Boolean designar = false;
 	private SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");	
@@ -412,6 +415,16 @@ public class GerenciaAtendimentoBean {
 
 	public void setDataAtualizacaoPainelPenal(String dataAtualizacaoPainelPenal) {
 		this.dataAtualizacaoPainelPenal = dataAtualizacaoPainelPenal;
+	}
+
+
+	public ProcessoBean getProcessoBean() {
+		return processoBean;
+	}
+
+
+	public void setProcessoBean(ProcessoBean processoBean) {
+		this.processoBean = processoBean;
 	}
 
 	
